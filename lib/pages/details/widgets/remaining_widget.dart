@@ -7,14 +7,7 @@ class RemainingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        showDatePicker(
-          context: context,
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2222),
-          initialDate: DateTime.now(),
-        );
-      },
+      onTap: () {},
       child: Container(
         padding:
             const EdgeInsets.only(left: 16.0, right: 16, bottom: 16, top: 8),

@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saudi_calender_task/core/widgets/ad_space.dart';
 import 'package:saudi_calender_task/core/widgets/custom_divider.dart';
+import 'package:saudi_calender_task/core/widgets/share_object.dart';
 import 'package:saudi_calender_task/pages/details/widgets/news_list_in_details.dart';
 import 'package:saudi_calender_task/pages/details/widgets/remaining_widget.dart';
 
 import '../../core/services/app_theme.dart';
-import '../../core/services/share_app.dart';
 import '../../gen/assets.gen.dart';
 import '../main/widgets/home/widgets/custom_event_widget.dart';
 
-class DetailsPage extends StatelessWidget with ShareMixin {
+class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key});
-  static const routeName = '/details';
+  static const routeName = '/Details';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +35,7 @@ class DetailsPage extends StatelessWidget with ShareMixin {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Image.asset(
-                  Assets.images.rectangle19591.path,
+                  Assets.images.saudiPoster.path,
                   fit: BoxFit.fill,
                 ),
               ),
@@ -105,7 +105,8 @@ class DetailsPage extends StatelessWidget with ShareMixin {
                 itemCount: 2,
                 itemBuilder: (context, index) {
                   return CustomEventWidget(
-                    navigate: false,
+                    hideBorder: false,
+                    color: 0xff6B7DCF,
                   );
                 },
               ),
@@ -126,101 +127,7 @@ class DetailsPage extends StatelessWidget with ShareMixin {
           ),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 98,
-        width: double.infinity,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 16,
-          children: [
-            ShareObject(
-              onTapDown: (details) {
-                whatsAppMessage(
-                  text: "$kShareAppName $kShareAppUrl",
-                );
-              },
-              icon: Assets.images.whatsapp,
-              label: "واتساب",
-            ),
-            ShareObject(
-              onTapDown: (details) {
-                shareApp(
-                  context,
-                  details.globalPosition.dx,
-                  details.globalPosition.dy,
-                );
-              },
-              icon: Assets.images.share,
-              label: "مشاركة",
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class EventDate extends StatefulWidget {
-  const EventDate({super.key});
-
-  @override
-  State<EventDate> createState() => _EventDateState();
-}
-
-class _EventDateState extends State<EventDate> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text("الاربعاء 19 يوليو 2023 - 1 محرم 1445"),
-          SizedBox(
-            height: 6,
-          ),
-          Row(
-            spacing: 8,
-            children: [
-              SvgPicture.asset(Assets.images.timer),
-              Text("5 ايام : 8 ساعات : 10 دقائق"),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ShareObject extends StatelessWidget {
-  const ShareObject(
-      {super.key,
-      required this.onTapDown,
-      required this.icon,
-      required this.label});
-  final void Function(TapDownDetails)? onTapDown;
-  final String icon, label;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: onTapDown,
-      child: Container(
-        height: 74,
-        width: 187,
-        decoration: BoxDecoration(
-            color: graySwatch.shade50, borderRadius: BorderRadius.circular(8)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(icon),
-            Text(
-              label,
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: CutomShareObjectRow(),
     );
   }
 }

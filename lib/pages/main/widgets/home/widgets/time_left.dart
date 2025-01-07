@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:saudi_calender_task/core/services/app_theme.dart';
 
-class RestOfTheEvent extends StatelessWidget {
-  const RestOfTheEvent({
+class TimeLeft extends StatelessWidget {
+  const TimeLeft({
     super.key,
     required this.textNumber,
     required this.date,

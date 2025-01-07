@@ -58,22 +58,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/Icon.png
   AssetGenImage get icon => const AssetGenImage('assets/images/Icon.png');
 
-  /// File path: assets/images/Rectangle 19545 (1).png
-  AssetGenImage get rectangle195451 =>
-      const AssetGenImage('assets/images/Rectangle 19545 (1).png');
-
-  /// File path: assets/images/Rectangle 19545.png
-  AssetGenImage get rectangle19545 =>
-      const AssetGenImage('assets/images/Rectangle 19545.png');
-
-  /// File path: assets/images/Rectangle 19590.png
-  AssetGenImage get rectangle19590 =>
-      const AssetGenImage('assets/images/Rectangle 19590.png');
-
-  /// File path: assets/images/Rectangle 19591.png
-  AssetGenImage get rectangle19591 =>
-      const AssetGenImage('assets/images/Rectangle 19591.png');
-
   /// File path: assets/images/archive.svg
   String get archive => 'assets/images/archive.svg';
 
@@ -105,6 +89,17 @@ class $AssetsImagesGen {
   /// File path: assets/images/document-text.svg
   String get documentText => 'assets/images/document-text.svg';
 
+  /// File path: assets/images/eventImage.png
+  AssetGenImage get eventImage =>
+      const AssetGenImage('assets/images/eventImage.png');
+
+  /// File path: assets/images/eventImage1.png
+  AssetGenImage get eventImage1 =>
+      const AssetGenImage('assets/images/eventImage1.png');
+
+  /// File path: assets/images/export.svg
+  String get export => 'assets/images/export.svg';
+
   /// File path: assets/images/gallery-slash.svg
   String get gallerySlash => 'assets/images/gallery-slash.svg';
 
@@ -116,6 +111,14 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/moneys.svg
   String get moneys => 'assets/images/moneys.svg';
+
+  /// File path: assets/images/newsPoster.png
+  AssetGenImage get newsPoster =>
+      const AssetGenImage('assets/images/newsPoster.png');
+
+  /// File path: assets/images/saudiPoster.png
+  AssetGenImage get saudiPoster =>
+      const AssetGenImage('assets/images/saudiPoster.png');
 
   /// File path: assets/images/setting-2.svg
   String get setting2 => 'assets/images/setting-2.svg';
@@ -132,10 +135,6 @@ class $AssetsImagesGen {
   /// List of all assets
   List<dynamic> get values => [
         icon,
-        rectangle195451,
-        rectangle19545,
-        rectangle19590,
-        rectangle19591,
         archive,
         arrowSwapHorizontal,
         bellActiveAlt,
@@ -146,10 +145,15 @@ class $AssetsImagesGen {
         calendarUnsSelected,
         cardImage,
         documentText,
+        eventImage,
+        eventImage1,
+        export,
         gallerySlash,
         gift,
         mobile,
         moneys,
+        newsPoster,
+        saudiPoster,
         setting2,
         share,
         timer,

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:saudi_calender_task/gen/assets.gen.dart';
 
-homeAppBar() {
+homeAppBar({
+  void Function(TapDownDetails)? onTapDown,
+}) {
   return AppBar(
     elevation: 0,
     leading: GestureDetector(
@@ -34,15 +36,18 @@ homeAppBar() {
                   color: Colors.grey.shade600,
                 ),
               ),
-              SvgPicture.asset(Assets.images.gallerySlash),
+              SvgPicture.asset(
+                Assets.images.gallerySlash,
+              ),
             ],
           ),
         ),
       ),
       SizedBox(width: 16),
       GestureDetector(
+        ///here is the share button on app bar
+        onTapDown: onTapDown,
         child: SvgPicture.asset(Assets.images.share),
-        onTap: () {},
       ),
       SizedBox(
         width: 16,

@@ -11,7 +11,7 @@ class NewsList extends StatelessWidget {
       height: 97,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 10,
+        itemCount: 4,
         itemBuilder: (context, index) {
           return Container(
             height: 81,
@@ -19,7 +19,7 @@ class NewsList extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             padding: const EdgeInsetsDirectional.only(start: 16),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(8),
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
@@ -74,7 +74,7 @@ class NewsList extends StatelessWidget {
                     topEnd: Radius.circular(8),
                   ),
                   child: Image.asset(
-                    Assets.images.cardImage.path,
+                    Assets.images.newsPoster.path,
                     height: 81,
                     width: 81,
                     fit: BoxFit.cover,

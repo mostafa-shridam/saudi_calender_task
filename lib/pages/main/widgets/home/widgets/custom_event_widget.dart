@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:saudi_calender_task/core/services/app_theme.dart';
 import 'package:saudi_calender_task/core/widgets/hijri_date.dart';
-import 'package:saudi_calender_task/pages/main/widgets/home/widgets/rest_of_the_event.dart';
+import 'package:saudi_calender_task/pages/main/widgets/home/widgets/time_left.dart';
 
 import '../../../../../gen/assets.gen.dart';
 import '../../../../details/details_page.dart';
@@ -14,9 +12,11 @@ import 'event_data.dart';
 class CustomEventWidget extends StatefulWidget {
   const CustomEventWidget({
     super.key,
-    this.navigate = true,
+    this.hideBorder = true,
+    required this.color,
   });
-  final bool navigate;
+  final bool hideBorder;
+  final int color;
   @override
   State<CustomEventWidget> createState() => _CustomEventWidgetState();
 }
@@ -43,17 +43,30 @@ class _CustomEventWidgetState extends State<CustomEventWidget> {
     super.dispose();
   }
 
+//time left calculation
   void updateTime() {
-    final dateNow = DateTime.parse("2025-01-06 17:09:00");
-    final currentDateFormatted =
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(dateNow);
-    final days = CustomDates().dateInDayes(currentDateFormatted);
-    final hours = CustomDates().dateInHours(currentDateFormatted);
-    final minutes = CustomDates().dateInMinutes(currentDateFormatted);
-    final seconds = CustomDates().dateInSeconds(currentDateFormatted);
+    List<String> time = [
+      "2025-01-08 09:50:00",
+      "2025-01-09 10:50:00",
+      "2025-01-27 10:50:00",
+      "2025-04-07 12:50:00",
+      "2025-02-09 10:50:00",
+      "2025-08-27 10:50:00",
+    ];
 
-    final eventTime = parseDate(currentDateFormatted);
-    if (eventTime.isBefore(DateTime.now())) {
+    // Target event date and time
+    final eventDate = DateTime.parse(time[0]);
+
+    // Time remaining calculation
+    final days = CustomDates().dateInDays(eventDate.toString());
+    final hours = CustomDates().dateInHours(eventDate.toString());
+    final minutes = CustomDates().dateInMinutes(eventDate.toString());
+    final minutesRedText =
+        CustomDates().dateInMinutesWithRedTextColor(eventDate.toString());
+    final seconds = CustomDates().dateInSeconds(eventDate.toString());
+
+    if (eventDate.isBefore(DateTime.now())) {
+      //if time left is less than 0025-01-07 10:50:00"
       timeValue = "End";
       timeName = "";
       textColor = Colors.black;
@@ -66,17 +79,26 @@ class _CustomEventWidgetState extends State<CustomEventWidget> {
       timeName = "ساعة";
       textColor = Colors.black;
     } else if (minutes != defultEnd) {
-      timeValue = minutes;
-      timeName = "دقيقة";
-      textColor = Colors.red;
+      // if time left is less than 10 minutes
+      if (minutesRedText != defultEnd) {
+        timeValue = minutesRedText;
+        timeName = "دقيقة";
+        textColor = Colors.red;
+      } else {
+        timeValue = minutes;
+        timeName = "دقيقة";
+        textColor = Colors.black;
+      }
     } else if (seconds != defultEnd) {
       timeValue = seconds;
       timeName = "ثانية";
       textColor = Colors.red;
     } else {
+      //if time left is less than 0
+
       timeValue = "End";
       timeName = "";
-      textColor = Colors.red;
+      textColor = Colors.black;
     }
 
     setState(() {});
@@ -86,7 +108,7 @@ class _CustomEventWidgetState extends State<CustomEventWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.navigate ? context.pushNamed(DetailsPage.routeName) : null;
+        widget.hideBorder ? context.pushNamed(DetailsPage.routeName) : null;
       },
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -104,10 +126,12 @@ class _CustomEventWidgetState extends State<CustomEventWidget> {
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
                 ),
-                color: widget.navigate ? Color(0xff6B7DCF).withAlpha(20) : null,
+                color: widget.hideBorder
+                    ? Color(widget.color).withAlpha(20)
+                    : null,
                 border: Border.all(
                   width: 1,
-                  color: widget.navigate
+                  color: widget.hideBorder
                       ? Colors.transparent
                       : graySwatch.shade200,
                 ),
@@ -125,7 +149,7 @@ class _CustomEventWidgetState extends State<CustomEventWidget> {
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: AssetImage(
-                          Assets.images.rectangle195451.path,
+                          Assets.images.eventImage.path,
                         ),
                       ),
                     ),
@@ -136,18 +160,18 @@ class _CustomEventWidgetState extends State<CustomEventWidget> {
                     width: 298,
                     child: EventData(),
                   ),
-                  RestOfTheEvent(
+                  TimeLeft(
                     textNumber: timeValue,
                     date: timeName.isEmpty ? "" : timeName,
                     textColor: textColor,
-                    color: widget.navigate,
+                    color: widget.hideBorder,
                   ),
                 ],
               ),
             ),
             Container(
               decoration: BoxDecoration(
-                color: Color(0xff6B7DCF),
+                color: Color(widget.color),
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
               width: 2,

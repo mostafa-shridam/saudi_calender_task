@@ -11,7 +11,7 @@ class NewsListInDetails extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 5,
+      itemCount: 4,
       itemBuilder: (context, index) => Container(
         height: 90,
         width: 382,
@@ -29,7 +29,7 @@ class NewsListInDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              width: 199,
+              width: 285,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,11 +70,13 @@ class NewsListInDetails extends StatelessWidget {
             const Spacer(),
             ClipRRect(
               borderRadius: BorderRadiusDirectional.only(
-                bottomEnd: Radius.circular(8),
-                topEnd: Radius.circular(8),
+                bottomEnd: Radius.circular(4),
+                topEnd: Radius.circular(4),
               ),
               child: Image.asset(
-                Assets.images.rectangle19590.path,
+                Assets.images.newsPoster.path,
+                width: 90,
+                height: 90,
                 fit: BoxFit.fill,
               ),
             ),

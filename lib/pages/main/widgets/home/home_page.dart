@@ -39,7 +39,7 @@ class HomePage extends ConsumerWidget with ShareMixin {
           child: Row(
             children: [
               Text(
-                hijriDateAndMiladi(),
+                hijriDateAndMiladiDate(),
                 style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -55,7 +55,8 @@ class HomePage extends ConsumerWidget with ShareMixin {
                     context,
                     details.globalPosition.dx,
                     details.globalPosition.dy,
-                    text: "تاريخ اليوم هجري و ميلادي ${hijriDateAndMiladi()}",
+                    text:
+                        "تاريخ اليوم هجري و ميلادي ${hijriDateAndMiladiDate()}",
                   );
                 },
               ),
@@ -72,7 +73,9 @@ class HomePage extends ConsumerWidget with ShareMixin {
               Column(
                 children: List.generate(
                   6,
-                  (index) => CustomEventWidget(),
+                  (index) => CustomEventWidget(
+                    color: 0xff6B7DCF,
+                  ),
                 ),
               ),
               SizedBox(height: 16),
