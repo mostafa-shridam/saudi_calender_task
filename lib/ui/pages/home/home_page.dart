@@ -7,7 +7,7 @@ import '../../widgets/hijri_date.dart';
 import '../../../gen/assets.gen.dart';
 import 'widgets/alert_warning.dart';
 import 'widgets/category_list.dart';
-import 'widgets/custom_event_widget.dart';
+import '../../widgets/custom_event_widget.dart';
 import 'widgets/news_list.dart';
 
 class HomePage extends ConsumerWidget with ShareMixin {

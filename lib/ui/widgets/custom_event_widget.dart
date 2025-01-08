@@ -1,13 +1,11 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
-import 'package:saudi_calender_task/ui/widgets/hijri_date.dart';
-import 'package:saudi_calender_task/ui/pages/home/widgets/time_left.dart';
+import 'package:saudi_calender_task/ui/widgets/time_left.dart';
 
-import '../../../../gen/assets.gen.dart';
-import '../../details/details_page.dart';
-import 'event_data.dart';
+import '../../gen/assets.gen.dart';
+import '../pages/details/details_page.dart';
+import '../pages/home/widgets/event_data.dart';
 
 class CustomEventWidget extends StatelessWidget {
   const CustomEventWidget({
@@ -70,7 +68,7 @@ class CustomEventWidget extends StatelessWidget {
                     child: EventData(),
                   ),
                   TimeLeft(
-                    time: "2025-01-08 10:30:00",
+                    date: "2025-01-08 13:49:00",
                     color: hideBorder,
                   ),
                 ],

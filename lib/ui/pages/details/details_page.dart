@@ -8,7 +8,7 @@ import '../../widgets/ad_space.dart';
 import '../../widgets/custom_divider.dart';
 import '../../widgets/event_date_details.dart';
 import '../../widgets/share_object.dart';
-import '../home/widgets/custom_event_widget.dart';
+import '../../widgets/custom_event_widget.dart';
 import 'widgets/news_list_in_details.dart';
 import 'widgets/remaining_widget.dart';
 
@@ -83,7 +83,9 @@ class DetailsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              EventDateDetails(),
+              EventDateDetails(
+                date: "2025-02-08 14:00:00",
+              ),
               RemainingWidget(),
               CustomDivider(),
               Padding(
