@@ -3,8 +3,8 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../gen/assets.gen.dart';
 
-class EventDate extends StatelessWidget {
-  const EventDate({super.key});
+class EventDateDetails extends StatelessWidget {
+  const EventDateDetails({super.key});
 
   @override
   Widget build(BuildContext context) {

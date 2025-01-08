@@ -83,12 +83,7 @@ class DetailsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              EventDate(),
-              Divider(
-                endIndent: 16,
-                thickness: 1,
-                color: graySwatch.shade100,
-              ),
+              EventDateDetails(),
               RemainingWidget(),
               CustomDivider(),
               Padding(
