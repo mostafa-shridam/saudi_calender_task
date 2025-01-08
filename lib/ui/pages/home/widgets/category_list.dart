@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../../core/services/app_theme.dart';
-import '../../../../../gen/assets.gen.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../gen/assets.gen.dart';
 
 class CategoryList extends StatelessWidget {
   const CategoryList({super.key});

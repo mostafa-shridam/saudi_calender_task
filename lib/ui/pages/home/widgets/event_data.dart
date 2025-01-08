@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:saudi_calender_task/core/widgets/hijri_date.dart';
+import 'package:saudi_calender_task/ui/widgets/hijri_date.dart';
 
 
 class EventData extends StatelessWidget {

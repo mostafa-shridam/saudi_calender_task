@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../gen/assets.gen.dart';
+import '../../../../gen/assets.gen.dart';
 
 class NewsList extends StatelessWidget {
   const NewsList({super.key});

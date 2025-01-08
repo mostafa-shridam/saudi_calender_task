@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:saudi_calender_task/core/services/app_theme.dart';
+import 'package:saudi_calender_task/core/theme/app_theme.dart';
 
-import '../../../gen/assets.gen.dart';
+import '../../../../gen/assets.gen.dart';
 
 class NewsListInDetails extends StatelessWidget {
   const NewsListInDetails({super.key});

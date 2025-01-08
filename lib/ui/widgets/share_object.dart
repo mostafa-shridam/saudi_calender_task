@@ -2,41 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saudi_calender_task/gen/assets.gen.dart';
 
-import '../services/app_theme.dart';
-import '../services/share_app.dart';
+import '../../core/theme/app_theme.dart';
+import '../../core/mixins/share_app.dart';
 
-class EventDate extends StatefulWidget {
-  const EventDate({super.key});
 
-  @override
-  State<EventDate> createState() => _EventDateState();
-}
-
-class _EventDateState extends State<EventDate> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text("الاربعاء 19 يوليو 2023 - 1 محرم 1445"),
-          SizedBox(
-            height: 6,
-          ),
-          Row(
-            spacing: 8,
-            children: [
-              SvgPicture.asset(Assets.images.timer),
-              Text("5 ايام : 8 ساعات : 10 دقائق"),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class ShareObject extends StatelessWidget {
   const ShareObject(
@@ -54,7 +23,9 @@ class ShareObject extends StatelessWidget {
         height: 74,
         width: 187,
         decoration: BoxDecoration(
-            color: graySwatch.shade50, borderRadius: BorderRadius.circular(8)),
+          color: graySwatch.shade50,
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

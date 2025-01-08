@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:saudi_calender_task/core/services/share_app.dart';
-import 'package:saudi_calender_task/core/widgets/ad_space.dart';
-import '../../../../core/widgets/hijri_date.dart';
-import '../../../../gen/assets.gen.dart';
+import 'package:saudi_calender_task/core/mixins/share_app.dart';
+import 'package:saudi_calender_task/ui/widgets/ad_space.dart';
+import '../../widgets/hijri_date.dart';
+import '../../../gen/assets.gen.dart';
 import 'widgets/alert_warning.dart';
 import 'widgets/category_list.dart';
 import 'widgets/custom_event_widget.dart';

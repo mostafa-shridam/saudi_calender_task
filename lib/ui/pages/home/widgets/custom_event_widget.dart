@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:saudi_calender_task/core/services/app_theme.dart';
-import 'package:saudi_calender_task/core/widgets/hijri_date.dart';
-import 'package:saudi_calender_task/pages/main/widgets/home/widgets/time_left.dart';
+import 'package:saudi_calender_task/core/theme/app_theme.dart';
+import 'package:saudi_calender_task/ui/widgets/hijri_date.dart';
+import 'package:saudi_calender_task/ui/pages/home/widgets/time_left.dart';
 
-import '../../../../../gen/assets.gen.dart';
-import '../../../../details/details_page.dart';
+import '../../../../gen/assets.gen.dart';
+import '../../details/details_page.dart';
 import 'event_data.dart';
 
 class CustomEventWidget extends StatefulWidget {

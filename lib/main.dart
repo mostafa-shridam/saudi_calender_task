@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:saudi_calender_task/core/services/app_theme.dart';
+import 'package:saudi_calender_task/core/theme/app_theme.dart';
+import 'package:saudi_calender_task/gen/fonts.gen.dart';
 
 import 'core/router/routes.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
+  Future.wait([
+    EasyLocalization.ensureInitialized(),
+  ]);
 
   runApp(
     ProviderScope(
@@ -28,7 +31,8 @@ void main() async {
     ),
   );
   SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.white));
+    const SystemUiOverlayStyle(statusBarColor: Colors.white),
+  );
 }
 
 class SaudiCalenderApp extends ConsumerWidget {
@@ -44,7 +48,7 @@ class SaudiCalenderApp extends ConsumerWidget {
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        theme: appTheme("IBMPlexSansArabic"),
+        theme: appTheme(FontFamily.iBMPlexSansArabic),
         routerConfig: Routes.instance.getRoutes(),
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,

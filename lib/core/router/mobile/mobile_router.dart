@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:saudi_calender_task/pages/details/details_page.dart';
+import 'package:saudi_calender_task/ui/pages/details/details_page.dart';
 
-import '../../../pages/main/main_page.dart';
+import '../../../ui/pages/main/main_page.dart';
 import '../routing_base.dart';
 
 class MobileRoutes extends RoutingBase {

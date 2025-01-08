@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:saudi_calender_task/core/services/app_theme.dart';
+import 'package:saudi_calender_task/core/theme/app_theme.dart';
 
 class CustomDivider extends StatelessWidget {
   const CustomDivider({super.key});

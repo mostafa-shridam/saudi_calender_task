@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:saudi_calender_task/core/services/app_theme.dart';
+import 'package:saudi_calender_task/core/theme/app_theme.dart';
 
-import '../../../../../gen/assets.gen.dart';
+import '../../../../gen/assets.gen.dart';
 
 class CategoryFilterData extends StatelessWidget {
   const CategoryFilterData({super.key});

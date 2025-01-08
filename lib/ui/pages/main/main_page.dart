@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:saudi_calender_task/gen/assets.gen.dart';
-import 'package:saudi_calender_task/pages/main/widgets/home/home_page.dart';
+import 'package:saudi_calender_task/ui/pages/home/home_page.dart';
 
-import '../../core/services/share_app.dart';
-import '../../core/widgets/home_app_bar.dart';
+import '../../../core/mixins/share_app.dart';
+import '../../widgets/home_app_bar.dart';
 
 class MainPage extends StatefulWidget with ShareMixin {
   const MainPage({super.key});
@@ -20,20 +20,16 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: currentIndex == 0
-          ? homeAppBar(
-              onTapDown: (details) {
-                widget.shareApp(
-                  context,
-                  details.globalPosition.dx,
-                  details.globalPosition.dy,
-                  text: kShareAppUrl,
-                );
-              },
-            )
-          : AppBar(
-              title: Text(title[currentIndex]),
-            ),
+      appBar: homeAppBar(
+        onTapDown: (details) {
+          widget.shareApp(
+            context,
+            details.globalPosition.dx,
+            details.globalPosition.dy,
+            text: kShareAppUrl,
+          );
+        },
+      ),
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
@@ -92,12 +88,4 @@ List<Widget> screens = const [
       child: Text(
     "تطبيقاتنا",
   )),
-];
-
-List<String> title = [
-  "",
-  "مناسباتي",
-  "الأخبار",
-  "الاعدادات",
-  "تطبيقاتنا",
 ];

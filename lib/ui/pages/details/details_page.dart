@@ -1,15 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:saudi_calender_task/core/widgets/ad_space.dart';
-import 'package:saudi_calender_task/core/widgets/custom_divider.dart';
-import 'package:saudi_calender_task/core/widgets/share_object.dart';
-import 'package:saudi_calender_task/pages/details/widgets/news_list_in_details.dart';
-import 'package:saudi_calender_task/pages/details/widgets/remaining_widget.dart';
 
-import '../../core/services/app_theme.dart';
-import '../../gen/assets.gen.dart';
-import '../main/widgets/home/widgets/custom_event_widget.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../gen/assets.gen.dart';
+import '../../widgets/ad_space.dart';
+import '../../widgets/custom_divider.dart';
+import '../../widgets/event_date_details.dart';
+import '../../widgets/share_object.dart';
+import '../home/widgets/custom_event_widget.dart';
+import 'widgets/news_list_in_details.dart';
+import 'widgets/remaining_widget.dart';
 
 class DetailsPage extends StatelessWidget {
   const DetailsPage({super.key});

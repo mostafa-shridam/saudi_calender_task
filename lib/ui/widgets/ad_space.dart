@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../services/app_theme.dart';
+import '../../core/theme/app_theme.dart';
 import 'custom_divider.dart';
 
 class AdSpace extends StatelessWidget {
