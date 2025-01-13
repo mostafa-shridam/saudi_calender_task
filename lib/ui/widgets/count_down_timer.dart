@@ -9,10 +9,7 @@ class CountDownTimer extends StatelessWidget {
   final bool makeAsRow;
   @override
   Widget build(BuildContext context) {
-    final String endTimeString = date;
-
-    final DateTime endTimeDateTime =
-        DateTime.parse(endTimeString.replaceAll(' ', 'T'));
+    final DateTime endTimeDateTime = DateTime.parse(date.split(" ")[0]);
 
     final int endTime = endTimeDateTime.millisecondsSinceEpoch;
 
@@ -107,7 +104,9 @@ class CountDownTimer extends StatelessWidget {
                 ),
 
               // Show minutes if under 1 hours
-              if ((time.hours ?? 0) == 0 && (time.min ?? 0) > 0)
+              if ((time.days ?? 0) == 0 &&
+                  (time.hours ?? 0) == 0 &&
+                  (time.min ?? 0) > 0)
                 Text(
                   "${time.min ?? 0}",
                   style: Theme.of(context).textTheme.labelMedium!.copyWith(
@@ -115,7 +114,9 @@ class CountDownTimer extends StatelessWidget {
                             time.min! < 10 ? Colors.red : graySwatch.shade900,
                       ),
                 ),
-              if ((time.hours ?? 0) == 0 && (time.min ?? 0) > 0)
+              if ((time.days ?? 0) == 0 &&
+                  (time.hours ?? 0) == 0 &&
+                  (time.min ?? 0) > 0)
                 Text(
                   minutesText,
                   style: TextStyle(
@@ -125,14 +126,20 @@ class CountDownTimer extends StatelessWidget {
                 ),
 
               // Show seconds if under 1 minute left
-              if ((time.min ?? 0) == 0 && (time.sec ?? 0) > 0)
+              if ((time.days ?? 0) == 0 &&
+                  (time.hours ?? 0) == 0 &&
+                  (time.min ?? 0) > 0 &&
+                  (time.sec ?? 0) > 0)
                 Text(
                   "${time.sec ?? 0}",
                   style: Theme.of(context).textTheme.labelMedium!.copyWith(
                         color: Colors.red,
                       ),
                 ),
-              if ((time.min ?? 0) == 0 && (time.sec ?? 0) > 0)
+              if ((time.days ?? 0) == 0 &&
+                  (time.hours ?? 0) == 0 &&
+                  (time.min ?? 0) > 0 &&
+                  (time.sec ?? 0) > 0)
                 Text(
                   secondsText,
                   style: TextStyle(

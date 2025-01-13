@@ -1,22 +1,36 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/app_theme.dart';
+import 'package:saudi_calender_task/models/event_model.dart';
+
 import '../../../gen/assets.gen.dart';
+import '../../../remote_service/event_service.dart';
 import '../../widgets/ad_space.dart';
 import '../../widgets/custom_divider.dart';
 import '../../widgets/event_date_details.dart';
 import '../../widgets/share_object.dart';
 import '../../widgets/custom_event_widget.dart';
+import '../home/widgets/category_list.dart';
 import 'widgets/news_list_in_details.dart';
 import 'widgets/remaining_widget.dart';
 
-class DetailsPage extends StatelessWidget {
-  const DetailsPage({super.key});
+class DetailsPage extends ConsumerWidget {
+  const DetailsPage({
+    super.key,
+    required this.event,
+  });
+  final EventModel event;
   static const routeName = '/Details';
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final events = ref.watch(eventProvider).events?.data;
+    events?.removeWhere((element) => element.id == event.id);
+    if (events == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -46,45 +60,29 @@ class DetailsPage extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Text(
-                      "اليوم الوطني",
+                    AutoSizeText(
+                      event.title ?? '',
+                      maxFontSize: 24,
+                      minFontSize: 19,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 24,
                         color: Color(0xff245D3A),
                       ),
                     ),
                     Spacer(),
-                    Container(
-                      height: 36,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(
-                            color: graySwatch.shade100,
-                            width: 1,
-                          )),
-                      child: Row(children: [
-                        SvgPicture.asset(Assets.images.calendar2),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          "مناسبات",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: graySwatch.shade600,
-                          ),
-                        ),
-                      ]),
+                    CategoryItem(
+                      isSelected: false,
+                      icon: Assets.images.gift,
+                      color: 0xff6B7DCF,
+                      label: event.section?.category?.name ?? '',
                     ),
                   ],
                 ),
               ),
               EventDateDetails(
-                date: "2025-02-08 14:00:00",
+                date: event.eventDate ?? '',
               ),
               RemainingWidget(),
               CustomDivider(),
@@ -100,11 +98,11 @@ class DetailsPage extends StatelessWidget {
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: 2,
+                itemCount: 3,
                 itemBuilder: (context, index) {
                   return CustomEventWidget(
                     hideBorder: false,
-                    color: 0xff6B7DCF,
+                    eventModel: events[index],
                   );
                 },
               ),
@@ -125,7 +123,9 @@ class DetailsPage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: CutomShareObjectRow(),
+      bottomNavigationBar: CutomShareObjectRow(
+        text: "${event.title}\n${event.eventDate}",
+      ),
     );
   }
 }

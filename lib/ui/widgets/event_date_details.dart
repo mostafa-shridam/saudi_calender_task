@@ -10,15 +10,16 @@ class EventDateDetails extends StatelessWidget {
   final String date;
   @override
   Widget build(BuildContext context) {
+    final eventDate = hijriDateAndMiladiDate(
+      date: date,
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(hijriDateAndMiladiDate(
-            date: date,
-          )),
+          Text(eventDate),
           SizedBox(
             height: 6,
           ),

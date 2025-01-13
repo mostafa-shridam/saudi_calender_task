@@ -5,8 +5,6 @@ import 'package:saudi_calender_task/gen/assets.gen.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/mixins/share_app.dart';
 
-
-
 class ShareObject extends StatelessWidget {
   const ShareObject(
       {super.key,
@@ -42,8 +40,8 @@ class ShareObject extends StatelessWidget {
 }
 
 class CutomShareObjectRow extends StatelessWidget with ShareMixin {
-  const CutomShareObjectRow({super.key});
-
+  const CutomShareObjectRow({super.key, this.text});
+  final String? text;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -56,7 +54,9 @@ class CutomShareObjectRow extends StatelessWidget with ShareMixin {
           ShareObject(
             onTapDown: (details) {
               whatsAppMessage(
-                text: "$kShareAppName $kShareAppUrl",
+                text: text != null
+                    ? "$kShareAppName\n$text\n$kShareAppUrl"
+                    : "$kShareAppName $kShareAppUrl",
               );
             },
             icon: Assets.images.whatsapp,
@@ -68,6 +68,9 @@ class CutomShareObjectRow extends StatelessWidget with ShareMixin {
                 context,
                 details.globalPosition.dx,
                 details.globalPosition.dy,
+                text: text != null
+                    ? "$kShareAppName\n$text\n$kShareAppUrl"
+                    : "$kShareAppName $kShareAppUrl",
               );
             },
             icon: Assets.images.export,

@@ -79,12 +79,12 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-List<Widget> screens = const [
+List<Widget> screens = [
   HomePage(),
-  Center(child: Text("مناسباتي")),
-  Center(child: Text("الأخبار")),
-  Center(child: Text("الاعدادات")),
-  Center(
+  const Center(child: Text("مناسباتي")),
+  const Center(child: Text("الأخبار")),
+  const Center(child: Text("الاعدادات")),
+  const Center(
       child: Text(
     "تطبيقاتنا",
   )),

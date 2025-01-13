@@ -3,15 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:saudi_calender_task/core/local_service/local_storage.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
 import 'package:saudi_calender_task/gen/fonts.gen.dart';
+import 'package:saudi_calender_task/services/get_it_service.dart';
 
 import 'core/router/routes.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Future.wait([
+  getItSetup();
+
+  // Ensure that localization and local storage are initialized
+  await Future.wait([
     EasyLocalization.ensureInitialized(),
+    LocalStorage.instance.init(),
   ]);
 
   runApp(
@@ -30,9 +36,6 @@ void main() {
       ),
     ),
   );
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(statusBarColor: Colors.white),
-  );
 }
 
 class SaudiCalenderApp extends ConsumerWidget {
@@ -40,6 +43,11 @@ class SaudiCalenderApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Set the status bar color
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.white),
+    );
+
     return ResponsiveBreakpoints(
       breakpoints: const [
         Breakpoint(start: 0, end: 600, name: MOBILE),
@@ -56,22 +64,19 @@ class SaudiCalenderApp extends ConsumerWidget {
         builder: (context, child) {
           final mediaQueryData = MediaQuery.of(context);
           return ResponsiveScaledBox(
-            width: ResponsiveValue<double?>(
-              context,
-              conditionalValues: [
-                const Condition.equals(name: MOBILE, value: 450),
-                const Condition.between(start: 601, end: 800, value: 800),
-                Condition.between(
-                  start: 801,
-                  end: 1200,
-                  value: mediaQueryData.size.width,
-                ),
-                Condition.largerThan(
-                  name: TABLET,
-                  value: mediaQueryData.size.width,
-                ),
-              ],
-            ).value,
+            width: ResponsiveValue<double?>(context, conditionalValues: [
+              const Condition.equals(name: MOBILE, value: 450),
+              const Condition.between(start: 601, end: 800, value: 800),
+              Condition.between(
+                start: 801,
+                end: 1200,
+                value: mediaQueryData.size.width,
+              ),
+              Condition.largerThan(
+                name: TABLET,
+                value: mediaQueryData.size.width,
+              ),
+            ]).value,
             child: MediaQuery(
               data: mediaQueryData.copyWith(
                 textScaler: TextScaler.linear(1),

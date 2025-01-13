@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
+import 'package:saudi_calender_task/models/event_model.dart';
 import 'package:saudi_calender_task/ui/widgets/time_left.dart';
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 
 import '../../gen/assets.gen.dart';
+import '../../remote_service/categories_service.dart';
 import '../pages/details/details_page.dart';
 import '../pages/home/widgets/event_data.dart';
 
-class CustomEventWidget extends StatelessWidget {
+class CustomEventWidget extends ConsumerWidget {
   const CustomEventWidget({
     super.key,
     this.hideBorder = true,
-    required this.color,
+    required this.eventModel,
   });
   final bool hideBorder;
-  final int color;
+  final EventModel eventModel;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final category = ref.watch(categoriesProvider.select((v) => v.data
+        ?.firstWhereOrNull((e) => e.id == eventModel.section?.category?.id)));
+
     return GestureDetector(
       onTap: () {
-        hideBorder ? context.pushNamed(DetailsPage.routeName) : null;
+        context.pushNamed(
+          DetailsPage.routeName,
+          extra: eventModel,
+        );
       },
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -37,7 +48,7 @@ class CustomEventWidget extends StatelessWidget {
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
                 ),
-                color: hideBorder ? Color(color).withAlpha(20) : null,
+                color: hideBorder ? Color(category?.backgroundColor ?? 0).withAlpha(20) : null,
                 border: Border.all(
                   width: 1,
                   color: hideBorder ? Colors.transparent : graySwatch.shade200,
@@ -65,10 +76,13 @@ class CustomEventWidget extends StatelessWidget {
                   ),
                   SizedBox(
                     width: 298,
-                    child: EventData(),
+                    child: EventData(
+                      eventModel: eventModel,
+                    ),
                   ),
                   TimeLeft(
-                    date: "2025-01-08 13:49:00",
+                    date: eventModel.eventDate ??
+                        DateTime.now().toIso8601String(),
                     color: hideBorder,
                   ),
                 ],
@@ -76,7 +90,7 @@ class CustomEventWidget extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: Color(color),
+                color: Color(category?.backgroundColor ?? 0),
                 borderRadius: const BorderRadius.all(Radius.circular(12)),
               ),
               width: 2,

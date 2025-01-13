@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:saudi_calender_task/core/mixins/share_app.dart';
+import 'package:saudi_calender_task/ui/pages/home/widgets/category_list.dart';
 import 'package:saudi_calender_task/ui/widgets/ad_space.dart';
+import '../../../remote_service/event_service.dart';
 import '../../widgets/hijri_date.dart';
 import '../../../gen/assets.gen.dart';
 import 'widgets/alert_warning.dart';
-import 'widgets/category_list.dart';
 import '../../widgets/custom_event_widget.dart';
 import 'widgets/news_list.dart';
 
 class HomePage extends ConsumerWidget with ShareMixin {
-  const HomePage({super.key});
-
+  const HomePage({
+    super.key,
+  });
+  static const routeName = '/HomePage';
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final events =
+        ref.watch(eventProvider.select((value) => value.fliteredList));
+
     return Column(
       children: [
         //this widget is ad space
@@ -63,6 +69,7 @@ class HomePage extends ConsumerWidget with ShareMixin {
             ],
           ),
         ),
+
         AlertWarning(),
         Expanded(
           child: ListView(
@@ -70,11 +77,19 @@ class HomePage extends ConsumerWidget with ShareMixin {
             children: [
               CategoryList(),
               NewsList(),
+              if (events.isEmpty)
+                const Center(
+                  child: SizedBox(height: 180,),
+                ),
+              if (events.isEmpty)
+                const Center(
+                  child: Text("لا يوجد مناسبات"),
+                ),
               Column(
                 children: List.generate(
-                  6,
+                  events.length,
                   (index) => CustomEventWidget(
-                    color: 0xff6B7DCF,
+                    eventModel: events[index],
                   ),
                 ),
               ),

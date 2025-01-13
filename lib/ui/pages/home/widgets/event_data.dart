@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:saudi_calender_task/models/event_model.dart';
 import 'package:saudi_calender_task/ui/widgets/hijri_date.dart';
-
 
 class EventData extends StatelessWidget {
   const EventData({
     super.key,
+    required this.eventModel,
   });
+  final EventModel eventModel;
 
   @override
   Widget build(BuildContext context) {
-    final formattedDate = eventDate(
-      "2023-05-01",
-    );
-
+    final formattedDate = parseEventDate(
+        eventModel.eventDate ?? DateTime.now().toIso8601String());
     return Padding(
       padding: EdgeInsetsDirectional.only(start: 12),
       child: Column(
@@ -21,7 +21,7 @@ class EventData extends StatelessWidget {
         spacing: 6,
         children: [
           Text(
-            "بداية العام الهجري 1445",
+            eventModel.title ?? '',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:saudi_calender_task/models/category_model.dart';
+import 'package:saudi_calender_task/remote_service/event_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../gen/assets.gen.dart';
+import '../../../../remote_service/categories_service.dart';
 
 class CategoryList extends StatelessWidget {
-  const CategoryList({super.key});
-
+  const CategoryList({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,44 +35,80 @@ class CategoryList extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          const CategoryListItems(),
+          CategoryListItems(),
         ],
       ),
     );
   }
 }
 
-class CategoryListItems extends StatefulWidget {
-  const CategoryListItems({super.key});
-
+class CategoryListItems extends ConsumerStatefulWidget {
+  const CategoryListItems({
+    super.key,
+  });
   @override
-  State<CategoryListItems> createState() => _CategoryListItemsState();
+  ConsumerState<CategoryListItems> createState() => _CategoryListItemsState();
 }
 
-class _CategoryListItemsState extends State<CategoryListItems> {
+class _CategoryListItemsState extends ConsumerState<CategoryListItems> {
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final categories = ref.watch(categoriesProvider);
+    List<CategoryModel> removeDuplicates({
+      required List<CategoryModel?> categories,
+    }) {
+      if (categories.isEmpty) {
+        return [];
+      }
+      final List<CategoryModel> uniqueCategories = [];
+      for (final category in categories) {
+        if (!uniqueCategories.contains(category)) {
+          uniqueCategories.add(category!);
+        }
+      }
+      return uniqueCategories;
+    }
+
+    final List<CategoryModel> category = [
+      CategoryModel(
+        id: "0",
+        name: "الكل",
+        sort: 99,
+        type: 99,
+        typeLabel: "all",
+      ),
+    ];
+    category.addAll(
+      removeDuplicates(
+        categories: categories.data ?? [],
+      ),
+    );
+
     return Expanded(
       child: SizedBox(
         height: 37,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 4,
+          itemCount: category.length,
           itemBuilder: (context, index) {
-            final isSelected = index == currentIndex;
+            final selectedCategory = ref.watch(eventProvider).category;
+            final isSelected = category[index].id == selectedCategory?.id;
+
             return GestureDetector(
               onTap: () {
                 setState(() {
                   currentIndex = index;
                 });
+
+                ref.read(eventProvider.notifier).changeCategory(category[index]);
               },
               child: CategoryItem(
                 isSelected: isSelected,
-                label: labels[index],
-                icon: icons[index],
-                color: colors[index],
+                label: category[index].name ?? "",
+                icon: Assets.images.calendar2,
+                color: category[index].backgroundColor,
               ),
             );
           },
@@ -137,24 +177,3 @@ class CategoryItem extends StatelessWidget {
     );
   }
 }
-
-List<int> colors = [
-  0xff245D3A,
-  0xff266EF1,
-  0xff944DE7,
-  0xffF6BC2F,
-];
-
-List<String> labels = [
-  "الكل",
-  "المناسبات",
-  "الرواتب",
-  "الدراسة",
-];
-
-List<String> icons = [
-  Assets.images.archive,
-  Assets.images.calendar2,
-  Assets.images.moneys,
-  Assets.images.book,
-];
