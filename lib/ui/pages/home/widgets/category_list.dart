@@ -56,6 +56,7 @@ class _CategoryListItemsState extends ConsumerState<CategoryListItems> {
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider);
+
     List<CategoryModel> removeDuplicates({
       required List<CategoryModel?> categories,
     }) {
@@ -85,34 +86,26 @@ class _CategoryListItemsState extends ConsumerState<CategoryListItems> {
         categories: categories.data ?? [],
       ),
     );
-
     return Expanded(
-      child: SizedBox(
-        height: 37,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: category.length,
-          itemBuilder: (context, index) {
-            final selectedCategory = ref.watch(eventProvider).category;
-            final isSelected = category[index].id == selectedCategory?.id;
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: category.length,
+        itemBuilder: (context, index) {
+          final selectedCategory = ref.watch(eventProvider).category;
+          final isSelected = category[index].id == selectedCategory?.id;
 
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  currentIndex = index;
-                });
-
-                ref.read(eventProvider.notifier).changeCategory(category[index]);
-              },
-              child: CategoryItem(
-                isSelected: isSelected,
-                label: category[index].name ?? "",
-                icon: Assets.images.calendar2,
-                color: category[index].backgroundColor,
-              ),
-            );
-          },
-        ),
+          return GestureDetector(
+            onTap: () {
+              ref.read(eventProvider.notifier).changeCategory(category[index]);
+            },
+            child: CategoryItem(
+              isSelected: isSelected,
+              label: category[index].name ?? "",
+              icon: category[index].image ?? "",
+              color: category[index].backgroundColor,
+            ),
+          );
+        },
       ),
     );
   }
@@ -122,56 +115,72 @@ class CategoryItem extends StatelessWidget {
   final bool isSelected;
   final String label;
   final String icon;
-  final int color;
+  final int? color;
 
   const CategoryItem({
     super.key,
     this.isSelected = false,
     required this.label,
     required this.icon,
-    required this.color,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        border: !isSelected ? Border.all(color: graySwatch.shade200) : null,
-        color: isSelected ? Color(color) : Colors.white,
-        boxShadow: isSelected
-            ? [
-                BoxShadow(
-                  color: const Color(0xff000000).withAlpha(8),
-                  blurRadius: 16,
-                  offset: const Offset(0, 8),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          border: !isSelected ? Border.all(color: graySwatch.shade200) : null,
+          color: isSelected ? Color(color ?? 0) : Colors.white,
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xff000000).withAlpha(8),
+                    blurRadius: 16,
+                    offset: const Offset(0, 8),
+                  ),
+                  BoxShadow(
+                    color: const Color(0xff000000).withAlpha(4),
+                    blurRadius: 4,
+                  ),
+                ]
+              : null,
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: icon.isNotEmpty
+              ? Row(
+                  children: [
+                    Image.network(
+                      icon,
+                      width: 20,
+                      height: 20,
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ],
+                )
+              : Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? Colors.white : Colors.black,
+                  ),
                 ),
-                BoxShadow(
-                  color: const Color(0xff000000).withAlpha(4),
-                  blurRadius: 4,
-                ),
-              ]
-            : null,
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: Row(
-          children: [
-            SvgPicture.asset(icon,
-                colorFilter: isSelected
-                    ? ColorFilter.mode(Colors.white, BlendMode.srcIn)
-                    : null),
-            const SizedBox(width: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? Colors.white : Colors.black,
-              ),
-            ),
-          ],
         ),
       ),
     );

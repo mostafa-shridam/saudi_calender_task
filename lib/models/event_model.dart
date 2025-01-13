@@ -23,7 +23,6 @@ class EventModel {
     this.section,
   });
 
-  // Factory لتحويل JSON إلى كائن EventModel
   factory EventModel.fromJson(Map<String, dynamic> json) {
     return EventModel(
       id: json['id'].toString(),
@@ -40,7 +39,6 @@ class EventModel {
     );
   }
 
-  // تحويل كائن EventModel إلى JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -68,7 +66,6 @@ class Section {
     this.category,
   });
 
-  // Factory لتحويل JSON إلى كائن Section
   factory Section.fromJson(Map<String, dynamic> json) {
     return Section(
       id: json['id'].toString(),
@@ -78,7 +75,6 @@ class Section {
     );
   }
 
-  // تحويل كائن Section إلى JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -103,7 +99,6 @@ class Category {
     this.typeLabel,
   });
 
-  // Factory لتحويل JSON إلى كائن Category
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
       id: json['id'].toString(),
@@ -114,7 +109,6 @@ class Category {
     );
   }
 
-  // تحويل كائن Category إلى JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,

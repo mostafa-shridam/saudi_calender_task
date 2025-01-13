@@ -41,9 +41,10 @@ class HomePage extends ConsumerWidget with ShareMixin {
         ),
         //today hijri date and miladi date
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Row(
             children: [
+              SizedBox(width: 16),
               Text(
                 hijriDateAndMiladiDate(),
                 style: const TextStyle(
@@ -54,7 +55,10 @@ class HomePage extends ConsumerWidget with ShareMixin {
               const Spacer(),
               //send app link with hijriDateAndMiladi
               GestureDetector(
-                child: const Icon(Icons.share_outlined),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: const Icon(Icons.share_outlined),
+                ),
                 onTapDown: (details) {
                   //share app
                   shareApp(
@@ -79,7 +83,9 @@ class HomePage extends ConsumerWidget with ShareMixin {
               NewsList(),
               if (events.isEmpty)
                 const Center(
-                  child: SizedBox(height: 180,),
+                  child: SizedBox(
+                    height: 180,
+                  ),
                 ),
               if (events.isEmpty)
                 const Center(

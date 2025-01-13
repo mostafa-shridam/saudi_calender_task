@@ -43,15 +43,14 @@ homeAppBar({
           ),
         ),
       ),
-      SizedBox(width: 16),
       GestureDetector(
         ///here is the share button on app bar
         onTapDown: onTapDown,
-        child: SvgPicture.asset(Assets.images.share),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SvgPicture.asset(Assets.images.share),
+        ),
       ),
-      SizedBox(
-        width: 16,
-      )
     ],
   );
 }

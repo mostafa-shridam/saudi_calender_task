@@ -9,12 +9,12 @@ import '../../../remote_service/event_service.dart';
 import '../../widgets/ad_space.dart';
 import '../../widgets/custom_divider.dart';
 import '../../widgets/event_date_details.dart';
+import '../../widgets/hijri_date.dart';
 import '../../widgets/share_object.dart';
 import '../../widgets/custom_event_widget.dart';
 import '../home/widgets/category_list.dart';
 import 'widgets/news_list_in_details.dart';
 import 'widgets/remaining_widget.dart';
-
 class DetailsPage extends ConsumerWidget {
   const DetailsPage({
     super.key,
@@ -74,8 +74,7 @@ class DetailsPage extends ConsumerWidget {
                     Spacer(),
                     CategoryItem(
                       isSelected: false,
-                      icon: Assets.images.gift,
-                      color: 0xff6B7DCF,
+                      icon: "",
                       label: event.section?.category?.name ?? '',
                     ),
                   ],
@@ -89,10 +88,11 @@ class DetailsPage extends ConsumerWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: AutoSizeText(
+                child: Text(
                   "احداث قادمة",
-                  maxFontSize: 19,
-                  minFontSize: 18,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Color(0xff475569),
+                      ),
                 ),
               ),
               ListView.builder(
@@ -109,10 +109,11 @@ class DetailsPage extends ConsumerWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: AutoSizeText(
+                child: Text(
                   "أخر الاخبار",
-                  maxFontSize: 19,
-                  minFontSize: 18,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Color(0xff475569),
+                      ),
                 ),
               ),
               NewsListInDetails(),
@@ -124,7 +125,9 @@ class DetailsPage extends ConsumerWidget {
         ],
       ),
       bottomNavigationBar: CutomShareObjectRow(
-        text: "${event.title}\n${event.eventDate}",
+        text: "${event.title}\n${parseEventDate(
+          date: event.eventDate,
+        )}",
       ),
     );
   }

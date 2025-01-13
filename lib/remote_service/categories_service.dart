@@ -1,15 +1,13 @@
-
-
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saudi_calender_task/models/category_model.dart';
 import 'package:saudi_calender_task/services/get_it_service.dart';
 
-import '../core/repos/event_repo_impl.dart';
+import '../core/repos/repo_impl.dart';
 
 class CategoriesService extends StateNotifier<Categories> {
-  final EventRepoImpl repo;
+  final RepoImpl repo;
 
   CategoriesService(this.repo) : super(Categories());
 
@@ -17,7 +15,6 @@ class CategoriesService extends StateNotifier<Categories> {
     try {
       final events = repo.getCategories();
       if (events.data != null) {
-      
         state = events;
       } else {
         log('No events data found.');
@@ -36,8 +33,9 @@ class CategoriesService extends StateNotifier<Categories> {
   }
 }
 
-final categoriesProvider = StateNotifierProvider<CategoriesService, Categories>((ref) {
-  final categoriesNotifier = CategoriesService(getIt.get<EventRepoImpl>());
+final categoriesProvider =
+    StateNotifierProvider<CategoriesService, Categories>((ref) {
+  final categoriesNotifier = CategoriesService(getIt.get<RepoImpl>());
   categoriesNotifier.saveCategories().then((_) {
     categoriesNotifier.getCategories();
   });

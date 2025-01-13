@@ -12,7 +12,7 @@ class EventData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formattedDate = parseEventDate(
-        eventModel.eventDate ?? DateTime.now().toIso8601String());
+        date: eventModel.eventDate ?? DateTime.now().toIso8601String());
     return Padding(
       padding: EdgeInsetsDirectional.only(start: 12),
       child: Column(

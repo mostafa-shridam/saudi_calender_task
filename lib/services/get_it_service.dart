@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:saudi_calender_task/services/dio_service.dart';
 
-import '../core/repos/event_repo_impl.dart';
+import '../core/repos/repo_impl.dart';
 import '../remote_service/event_service.dart';
 import 'get_data_service.dart';
 
@@ -12,8 +12,8 @@ void getItSetup() async {
     DioService(),
   );
   getIt.registerSingleton<GetDataService>(GetDataService());
-  getIt.registerSingleton<EventRepoImpl>(EventRepoImpl());
+  getIt.registerSingleton<RepoImpl>(RepoImpl());
   getIt.registerSingleton<EventRiverpod>(EventRiverpod(
-    getIt.get<EventRepoImpl>(),
+    getIt.get<RepoImpl>(),
   ));
 }

@@ -6,12 +6,13 @@ import '../../models/category_model.dart';
 import '../../models/event_model.dart';
 import '../../services/get_data_service.dart';
 import '../../services/get_it_service.dart';
-import 'event_repo.dart';
+import 'repo.dart';
 
-class EventRepoImpl implements EventRepo {
+class RepoImpl implements Repo {
   final GetDataService getDataService = getIt.get<GetDataService>();
   final EventsLocalService eventsLocalService = EventsLocalService();
-  final CategoriesLocalService categoriesLocalService = CategoriesLocalService();
+  final CategoriesLocalService categoriesLocalService =
+      CategoriesLocalService();
 
   @override
   Future<void> saveEvents() async {
@@ -40,7 +41,7 @@ class EventRepoImpl implements EventRepo {
         throw Exception("No events found in local storage.");
       }
     } catch (e) {
-      log(e.toString());
+      log("No events found in local storage${e.toString()}");
       throw Exception("No events found in local storage.");
     }
   }
@@ -60,6 +61,7 @@ class EventRepoImpl implements EventRepo {
       throw Exception("No categories found in local storage.");
     }
   }
+
   @override
   Future<void> saveCategories() async {
     final categoriesData = await getDataService.getCategories();
@@ -67,7 +69,8 @@ class EventRepoImpl implements EventRepo {
       if (categoriesData == null) {
         getCategories();
       }
-      final saveCategories = categoriesLocalService.saveCategories(jsonEncode(categoriesData));
+      final saveCategories =
+          categoriesLocalService.saveCategories(jsonEncode(categoriesData));
       return saveCategories;
     } catch (e) {
       getCategories();
