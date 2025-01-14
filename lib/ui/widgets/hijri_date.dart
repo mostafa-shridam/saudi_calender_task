@@ -28,7 +28,7 @@ String hijriDateAndMiladiDate({String? date}) {
 
 /// Get the event date in both Hijri and Miladi formats with day name
 String parseEventDate({String? date}) {
-  final eventDate = DateTime.tryParse(date ?? DateTime.now().toString()) ??
+  final eventDate = DateTime.tryParse(date?.split(" ")[0] ?? DateTime.now().toString()) ??
       DateTime.parse(date?.split(" ")[0] ?? DateTime.now().toString());
 
   // Hijri date

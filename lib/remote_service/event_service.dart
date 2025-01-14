@@ -70,7 +70,6 @@ class EventState {
   List<EventModel> get fliteredList {
     if (category?.id == '0') return events?.data ?? [];
     return events?.data?.where((element) {
-          log('element.section?.category?.id ${category?.id}');
           return element.section?.category?.id == category?.id;
         }).toList() ??
         [];

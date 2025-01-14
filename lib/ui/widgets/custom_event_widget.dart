@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +9,7 @@ import 'package:saudi_calender_task/ui/widgets/time_left.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
+import '../../core/local_service/local_notification_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../remote_service/categories_service.dart';
 import '../pages/details/details_page.dart';
@@ -24,7 +27,20 @@ class CustomEventWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final category = ref.watch(categoriesProvider.select((v) => v.data
         ?.firstWhereOrNull((e) => e.id == eventModel.section?.category?.id)));
-
+    try {
+    final eventNotify =  ref.watch(localNotificationsServiceProvider).showNotification(
+            id: eventModel.id.toString(),
+            body: "",
+            dateTime: DateTime.tryParse(eventModel.startsAt?.split(" ")[0] ??
+                    DateTime.now().toString()) ??
+                DateTime.now(),
+            title: eventModel.title.toString(),
+            
+          );
+          log("eventNotify: $eventNotify");
+    } catch (e) {
+      log("Error showing notification: $e");
+    }
     return GestureDetector(
       onTap: () {
         context.pushNamed(
@@ -48,7 +64,9 @@ class CustomEventWidget extends ConsumerWidget {
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
                 ),
-                color: hideBorder ? Color(category?.backgroundColor ?? 0).withAlpha(20) : null,
+                color: hideBorder
+                    ? Color(category?.backgroundColor ?? 0).withAlpha(20)
+                    : null,
                 border: Border.all(
                   width: 1,
                   color: hideBorder ? Colors.transparent : graySwatch.shade200,

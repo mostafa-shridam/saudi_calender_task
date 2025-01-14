@@ -1,14 +1,20 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_timezone_updated_gradle/flutter_native_timezone.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:saudi_calender_task/core/local_service/local_storage.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
 import 'package:saudi_calender_task/gen/fonts.gen.dart';
 import 'package:saudi_calender_task/services/get_it_service.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'core/router/routes.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +24,10 @@ void main() async {
   await Future.wait([
     EasyLocalization.ensureInitialized(),
     LocalStorage.instance.init(),
+    _configureLocalTimeZone(),
+    Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    )
   ]);
 
   runApp(
@@ -93,4 +103,11 @@ class SaudiCalenderApp extends ConsumerWidget {
       ),
     );
   }
+}
+
+Future<void> _configureLocalTimeZone() async {
+  final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation(currentTimeZone));
 }

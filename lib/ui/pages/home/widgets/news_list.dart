@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../../../../gen/assets.gen.dart';
+import 'package:saudi_calender_task/gen/assets.gen.dart';
 
 class NewsList extends StatelessWidget {
-  const NewsList({super.key});
-
+  const NewsList({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -43,7 +43,7 @@ class NewsList extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "اجازة نهاية العام",
                         overflow: TextOverflow.ellipsis,
@@ -55,7 +55,7 @@ class NewsList extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "تبدأ اجازة نهاية العام الدراسي من يوم16",
+                        "تبدأاجازة نهاية العام الدراسي من يوم 18 يوليو 2023",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

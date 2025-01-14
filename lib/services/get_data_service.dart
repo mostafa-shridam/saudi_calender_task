@@ -14,7 +14,6 @@ class GetDataService {
   GetDataService() : dioService = getIt.get<DioService>();
   EventsLocalService eventsLocalService = EventsLocalService();
   CategoriesLocalService categoriesLocalService = CategoriesLocalService();
-
   Future<Events?> getEvents() async {
     try {
       final events = await dioService.get(
@@ -47,7 +46,7 @@ class GetDataService {
       if (categories == null) {
         final localCategories = categoriesLocalService.getCategories();
         if (localCategories == null) {
-          log('No events found in local storage.');
+          log('No categories found in local storage.');
           return null;
         }
         return localCategories;
@@ -59,4 +58,5 @@ class GetDataService {
       return categoriesLocalService.getCategories()!;
     }
   }
+
 }

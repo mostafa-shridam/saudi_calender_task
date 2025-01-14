@@ -5,5 +5,7 @@ enum ConstantsEnums {
   events,
   category,
   categoryKey,
+  news,
+  newsKey,
   section,
 }

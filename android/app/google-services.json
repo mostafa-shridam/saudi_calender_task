@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "570065127644",
+    "project_id": "saudi-calender",
+    "storage_bucket": "saudi-calender.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570065127644:android:8e0e3e4470c1e145c64c19",
+        "android_client_info": {
+          "package_name": "com.example.saudi_calender_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG69q0-5chllEidmeUvOQVMcIsenoVlgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

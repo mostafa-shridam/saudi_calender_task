@@ -1,22 +1,36 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:saudi_calender_task/gen/assets.gen.dart';
 import 'package:saudi_calender_task/ui/pages/home/home_page.dart';
 
+import '../../../core/local_service/local_notification_service.dart';
 import '../../../core/mixins/share_app.dart';
 import '../../widgets/home_app_bar.dart';
 
-class MainPage extends StatefulWidget with ShareMixin {
+class MainPage extends ConsumerStatefulWidget with ShareMixin {
   const MainPage({super.key});
   static const String routeName = '/MainPage';
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  ConsumerState<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends ConsumerState<MainPage> {
   int currentIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      await ref.read(localNotificationsServiceProvider).initNotify();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +90,19 @@ class _MainPageState extends State<MainPage> {
         },
       ),
     );
+  }
+
+  Future<void> showNotify() {
+    try {
+      return ref.read(localNotificationsServiceProvider).showNotification(
+          id: "22",
+          title: "title",
+          body: "body",
+          dateTime: DateTime.now().add(Duration(seconds: 5)));
+    } catch (e) {
+      log("Error showing notification: $e");
+      throw Exception("Error showing notification: $e");
+    }
   }
 }
 

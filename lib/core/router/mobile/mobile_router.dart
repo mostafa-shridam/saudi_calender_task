@@ -32,7 +32,6 @@ class MobileRoutes extends RoutingBase {
           name: DetailsPage.routeName,
           builder: (context, state) {
             final eventModel = state.extra as EventModel;
-
             return DetailsPage(
               event: eventModel,
             );
