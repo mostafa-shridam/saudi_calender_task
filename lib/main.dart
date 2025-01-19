@@ -24,7 +24,7 @@ void main() async {
   await Future.wait([
     EasyLocalization.ensureInitialized(),
     LocalStorage.instance.init(),
-    _configureLocalTimeZone(),
+    configureLocalTimeZone(),
     Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     )
@@ -105,7 +105,7 @@ class SaudiCalenderApp extends ConsumerWidget {
   }
 }
 
-Future<void> _configureLocalTimeZone() async {
+Future<void> configureLocalTimeZone() async {
   final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
 
   tz.initializeTimeZones();

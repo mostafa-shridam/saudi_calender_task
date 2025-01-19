@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,7 +25,14 @@ class _MainPageState extends ConsumerState<MainPage> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      await ref.read(localNotificationsServiceProvider).initNotify();
+      await ref.read(localNotificationsServiceProvider).initNotify(
+            context,
+          );
+      ref.watch(localNotificationsServiceProvider).initOneSignal();
+      ref.watch(localNotificationsServiceProvider).initFirebaseMessaging(context: context);
+      ref
+          .watch(localNotificationsServiceProvider)
+          .oneSignalNotifications(context: context);
     });
   }
 
@@ -90,19 +95,6 @@ class _MainPageState extends ConsumerState<MainPage> {
         },
       ),
     );
-  }
-
-  Future<void> showNotify() {
-    try {
-      return ref.read(localNotificationsServiceProvider).showNotification(
-          id: "22",
-          title: "title",
-          body: "body",
-          dateTime: DateTime.now().add(Duration(seconds: 5)));
-    } catch (e) {
-      log("Error showing notification: $e");
-      throw Exception("Error showing notification: $e");
-    }
   }
 }
 

@@ -37,6 +37,30 @@ class GetDataService {
     }
   }
 
+  Future<EventModel?> getEvent(int? eventId) async {
+    try {
+      final event = await dioService.get(
+        '$eventsEndPoint/$eventId?page=0&limit=0',
+        withToken: false,
+      );
+      if (event == null) {
+        final localEvent = eventsLocalService.getEvent(eventId);
+        if (localEvent == null) {
+          log('No events found in local storage.');
+          return null;
+        }
+        log('Events in local storage: $localEvent');
+
+        return localEvent;
+      }
+      eventsLocalService.saveEvent(jsonEncode(event), eventId);
+      return EventModel.fromJson(event['data'] ?? {});
+    } catch (e) {
+      log('Error getting Events: $e');
+      return eventsLocalService.getEvent(eventId);
+    }
+  }
+
   Future<Categories?> getCategories() async {
     try {
       final categories = await dioService.get(
@@ -58,5 +82,4 @@ class GetDataService {
       return categoriesLocalService.getCategories()!;
     }
   }
-
 }

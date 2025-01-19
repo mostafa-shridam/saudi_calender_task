@@ -1,55 +1,76 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:saudi_calender_task/core/theme/app_theme.dart';
-import 'package:saudi_calender_task/models/event_model.dart';
-import 'package:saudi_calender_task/ui/widgets/time_left.dart';
-// ignore: depend_on_referenced_packages
-import 'package:collection/collection.dart';
 
+import '../../constants.dart';
 import '../../core/local_service/local_notification_service.dart';
+import '../../core/theme/app_theme.dart';
 import '../../gen/assets.gen.dart';
+import '../../models/event_model.dart';
 import '../../remote_service/categories_service.dart';
 import '../pages/details/details_page.dart';
 import '../pages/home/widgets/event_data.dart';
+import 'time_left.dart';
 
-class CustomEventWidget extends ConsumerWidget {
+class CustomEventWidget extends ConsumerStatefulWidget {
   const CustomEventWidget({
     super.key,
     this.hideBorder = true,
     required this.eventModel,
   });
+
   final bool hideBorder;
   final EventModel eventModel;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final category = ref.watch(categoriesProvider.select((v) => v.data
-        ?.firstWhereOrNull((e) => e.id == eventModel.section?.category?.id)));
+  ConsumerState<CustomEventWidget> createState() => _CustomEventWidgetState();
+}
+
+class _CustomEventWidgetState extends ConsumerState<CustomEventWidget> {
+  @override
+  void initState() {
+    super.initState();
+
+    final localNotificationsService =
+        ref.read(localNotificationsServiceProvider);
+
     try {
-    final eventNotify =  ref.watch(localNotificationsServiceProvider).showNotification(
-            id: eventModel.id.toString(),
-            body: "",
-            dateTime: DateTime.tryParse(eventModel.startsAt?.split(" ")[0] ??
-                    DateTime.now().toString()) ??
-                DateTime.now(),
-            title: eventModel.title.toString(),
-            
-          );
-          log("eventNotify: $eventNotify");
+      final eventDate = DateTime.tryParse(
+            widget.eventModel.eventDate?.split(" ")[0] ??
+                DateTime.now().toString(),
+          ) ??
+          DateTime.now();
+
+      localNotificationsService.showScheduleNotification(
+        id: widget.eventModel.id.toString(),
+        body: widget.eventModel.title ?? "",
+        dateTime: eventDate,
+        title: appName.toString(),
+      );
     } catch (e) {
       log("Error showing notification: $e");
     }
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final category = ref.watch(categoriesProvider.select((v) => v.data
+        ?.firstWhereOrNull(
+            (e) => e.id == widget.eventModel.section?.category?.id)));
+
     return GestureDetector(
       onTap: () {
         context.pushNamed(
           DetailsPage.routeName,
-          extra: eventModel,
+          extra: widget.eventModel,
         );
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 8,
           horizontal: 16,
         ),
@@ -64,12 +85,14 @@ class CustomEventWidget extends ConsumerWidget {
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
                 ),
-                color: hideBorder
+                color: widget.hideBorder
                     ? Color(category?.backgroundColor ?? 0).withAlpha(20)
                     : null,
                 border: Border.all(
                   width: 1,
-                  color: hideBorder ? Colors.transparent : graySwatch.shade200,
+                  color: widget.hideBorder
+                      ? Colors.transparent
+                      : graySwatch.shade200,
                 ),
               ),
               child: Row(
@@ -78,7 +101,7 @@ class CustomEventWidget extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsetsDirectional.only(start: 16),
+                    margin: const EdgeInsetsDirectional.only(start: 16),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(width: 1, color: graySwatch.shade100),
@@ -95,13 +118,13 @@ class CustomEventWidget extends ConsumerWidget {
                   SizedBox(
                     width: 298,
                     child: EventData(
-                      eventModel: eventModel,
+                      eventModel: widget.eventModel,
                     ),
                   ),
                   TimeLeft(
-                    date: eventModel.eventDate ??
+                    date: widget.eventModel.eventDate ??
                         DateTime.now().toIso8601String(),
-                    color: hideBorder,
+                    color: widget.hideBorder,
                   ),
                 ],
               ),

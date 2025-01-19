@@ -18,20 +18,20 @@ class RepoImpl implements Repo {
   Future<void> saveEvents() async {
     final eventsData = await getDataService.getEvents();
     try {
-      if (eventsData == null) {
-        getEvent();
+      if (eventsData == null ) {
+        log("No events data retrieved from the API.");
+        throw Exception("No events data available.");
       }
-      final saveEvents = eventsLocalService.saveEvents(jsonEncode(eventsData));
+      final saveEvents =  eventsLocalService.saveEvents(jsonEncode(eventsData));
       return saveEvents;
     } catch (e) {
-      getEvent();
       log(e.toString());
       throw Exception("Failed to save events: ${e.toString()}");
     }
   }
 
   @override
-  Events getEvent() {
+  Events getEvents() {
     try {
       final eventData = eventsLocalService.getEvents();
       if (eventData != null) {
@@ -41,8 +41,41 @@ class RepoImpl implements Repo {
         throw Exception("No events found in local storage.");
       }
     } catch (e) {
-      log("No events found in local storage${e.toString()}");
-      throw Exception("No events found in local storage.");
+      log("Error fetching events: ${e.toString()}");
+      throw Exception("Error fetching events.");
+    }
+  }
+
+  @override
+  Future<void> saveEvent(int? eventId) async {
+    final eventsData = await getDataService.getEvent(eventId);
+    try {
+      if (eventsData == null) {
+        log("No event data retrieved for eventId: $eventId");
+        throw Exception("No event data available for eventId: $eventId");
+      }
+      final saveEvents =  eventsLocalService.saveEvent(jsonEncode(eventsData), eventId);
+      return saveEvents;
+    } catch (e) {
+      log(e.toString());
+      throw Exception("Failed to save event: ${e.toString()}");
+    }
+  }
+
+  @override
+  EventModel getEvent(int? eventId) {
+    try {
+      final event = eventsLocalService.getEvent(eventId);
+      if (event != null) {
+        return event;
+      } else {
+        saveEvent(eventId);
+        log("Event with ID $eventId not found.");
+        throw Exception("Event with ID $eventId not found.");
+      }
+    } catch (e) {
+      log(e.toString());
+      throw Exception("Error fetching event.");
     }
   }
 
@@ -58,7 +91,7 @@ class RepoImpl implements Repo {
       }
     } catch (e) {
       log(e.toString());
-      throw Exception("No categories found in local storage.");
+      throw Exception("Error fetching categories.");
     }
   }
 
@@ -67,13 +100,12 @@ class RepoImpl implements Repo {
     final categoriesData = await getDataService.getCategories();
     try {
       if (categoriesData == null) {
-        getCategories();
+        log("No categories data retrieved from the API.");
+        throw Exception("No categories data available.");
       }
-      final saveCategories =
-          categoriesLocalService.saveCategories(jsonEncode(categoriesData));
+      final saveCategories =  categoriesLocalService.saveCategories(jsonEncode(categoriesData));
       return saveCategories;
     } catch (e) {
-      getCategories();
       log(e.toString());
       throw Exception("Failed to save categories: ${e.toString()}");
     }

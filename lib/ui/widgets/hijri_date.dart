@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 /// Get the current Hijri and Miladi dates as a formatted string
 String hijriDateAndMiladiDate({String? date}) {
-  final eventDate = DateTime.tryParse(date ?? DateTime.now().toString()) ??
+  final eventDate = DateTime.tryParse(date?.split(" ")[0] ?? DateTime.now().toString()) ??
       DateTime.parse(date?.split(" ")[0] ?? DateTime.now().toString());
   // Hijri date
   final hDate = HijriCalendar.fromDate(eventDate);

@@ -13,7 +13,7 @@ void getItSetup() async {
   );
   getIt.registerSingleton<GetDataService>(GetDataService());
   getIt.registerSingleton<RepoImpl>(RepoImpl());
-  getIt.registerSingleton<EventRiverpod>(EventRiverpod(
+  getIt.registerSingleton<EventRemoteService>(EventRemoteService(
     getIt.get<RepoImpl>(),
   ));
 }
