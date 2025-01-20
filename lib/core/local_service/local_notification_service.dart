@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:collection/collection.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -14,6 +15,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../constants.dart';
+import '../../firebase_options.dart';
 import '../../models/event_model.dart';
 import '../../services/handle_notifications.dart';
 import '../../core/local_service/events_local_service.dart';
@@ -120,7 +122,6 @@ class LocalNotificationsService {
     OneSignal.initialize(appIdForOneSignal);
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
     OneSignal.Notifications.lifecycleInit();
-    OneSignal.Debug.setAlertLevel(OSLogLevel.verbose);
     OneSignal.Notifications.requestPermission(true);
   }
 
@@ -259,10 +260,7 @@ LocalNotificationsService localNotificationsService(Ref ref) {
       enableVibration: true,
       autoCancel: true,
       visibility: NotificationVisibility.public,
-      color: Colors.red,
       largeIcon: DrawableResourceAndroidBitmap('mipmap/ic_launcher'),
-      styleInformation: BigTextStyleInformation(''),
-      subText: '',
     ),
     iOS: const DarwinNotificationDetails(
       presentAlert: true,

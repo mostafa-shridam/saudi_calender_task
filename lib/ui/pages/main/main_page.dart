@@ -9,6 +9,7 @@ import 'package:saudi_calender_task/ui/pages/home/home_page.dart';
 
 import '../../../core/local_service/local_notification_service.dart';
 import '../../../core/mixins/share_app.dart';
+import '../../../remote_service/event_service.dart';
 import '../../widgets/home_app_bar.dart';
 
 class MainPage extends ConsumerStatefulWidget with ShareMixin {
@@ -25,13 +26,16 @@ class _MainPageState extends ConsumerState<MainPage> {
   void initState() {
     super.initState();
     Future.microtask(() async {
+      await ref.watch(eventProvider.notifier).getEvents();
       await ref.read(localNotificationsServiceProvider).initNotify(
             context,
           );
-      ref.watch(localNotificationsServiceProvider).initOneSignal();
-      ref.watch(localNotificationsServiceProvider).initFirebaseMessaging(context: context);
+      ref.read(localNotificationsServiceProvider).initOneSignal();
       ref
-          .watch(localNotificationsServiceProvider)
+          .read(localNotificationsServiceProvider)
+          .initFirebaseMessaging(context: context);
+      ref
+          .read(localNotificationsServiceProvider)
           .oneSignalNotifications(context: context);
     });
   }
