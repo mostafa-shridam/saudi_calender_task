@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:collection/collection.dart';
@@ -37,7 +36,6 @@ class LocalNotificationsService {
     required this.eventsLocalService,
   });
 
-  // تحسين عملية طلب الأذونات بناءً على النظام
   Future<void> _requestPermissions() async {
     if (Platform.isAndroid) {
       await flutterLocalNotificationsPlugin
@@ -61,7 +59,6 @@ class LocalNotificationsService {
     }
   }
 
-  // تحسين تهيئة الإشعارات
   Future<void> initNotify(BuildContext context) async {
     await _requestPermissions();
 
@@ -114,34 +111,41 @@ class LocalNotificationsService {
             UILocalNotificationDateInterpretation.absoluteTime,
       );
     } catch (e, stackTrace) {
-      log('Error showing notification: $e', error: e, stackTrace: stackTrace);
+      log('Failed to schedule notification', error: e, stackTrace: stackTrace);
     }
   }
 
+// one signal notifications init
   Future<void> initOneSignal() async {
     OneSignal.initialize(appIdForOneSignal);
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-    OneSignal.LiveActivities.setupDefault();
+    OneSignal.Notifications.lifecycleInit();
+    OneSignal.Debug.setAlertLevel(OSLogLevel.verbose);
     OneSignal.Notifications.requestPermission(true);
   }
 
+// one signal notifications
   void oneSignalNotifications({required BuildContext context}) async {
     OneSignal.Notifications.addClickListener((event) async {
       final eventId = event.notification.additionalData?["id"];
       final url = event.notification.additionalData?["url"];
+      final pageName = event.notification.additionalData?["pageName"];
       EventModel? events;
 
       events ??= eventsLocalService.getEvents()?.data?.firstWhereOrNull(
             (e) => e.id == eventId.toString(),
           );
+      // check if notification has eventId and filter ids
       if (events != null) {
         handleNotifications.handleEvent(
           context,
           int.tryParse(events.id ?? "0"),
         );
+        // check if notification has url
       } else if (url != null) {
         await handleURL(url: url);
-      } else {
+        // check if notification has pageName
+      } else if (pageName != null) {
         final pageName = event.notification.additionalData?["pageName"];
         if (pageName != null) {
           handleNotifications.handlePageRoute(
@@ -153,7 +157,38 @@ class LocalNotificationsService {
     });
   }
 
-  Future<void> initFirebaseMessaging({required BuildContext context}) async {
+  Future<void> firebaseNotify({
+    required BuildContext context,
+    required RemoteMessage event,
+  }) async {
+    // check if notification has pageName
+    if (event.data['pageName'] != null) {
+      handleFirebaseNotification(
+        event,
+      );
+      handleNotifications.handlePageRoute(
+        context: context,
+        pageName: event.data['pageName'],
+      );
+      // check if notification has id
+    } else if (event.data['id'] != null) {
+      handleFirebaseNotification(
+        event,
+      );
+      handleNotifications.handleFirebaseMessage(
+        context: context,
+        message: event.data['id'],
+      );
+      // check if notification has url
+    } else if (event.data['url'] != null) {
+      await handleURL(url: event.data['url']);
+    }
+  }
+
+// init firebase notifications
+  Future<void> initFirebaseMessaging({
+    required BuildContext context,
+  }) async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     log('FCM Token: $fcmToken');
 
@@ -163,46 +198,39 @@ class LocalNotificationsService {
       sound: true,
     );
 
-    await FirebaseMessaging.instance.requestPermission(alert: true);
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
 
-    FirebaseMessaging.onMessage.listen(_handleForegroundNotification);
-    FirebaseMessaging.onMessageOpenedApp.listen((event) async {
-      if (event.data['pageName'] != null) {
-        _handleForegroundNotification(
-          event,
-        );
-        handleNotifications.handlePageRoute(
-          context: context,
-          pageName: event.data['pageName'],
-        );
-      } else if (event.data['id'] != null) {
-        _handleForegroundNotification(
-          event,
-        );
-        handleNotifications.handleFirebaseMessage(
-          context: context,
-          message: event.data['id'],
-        );
-      } else if (event.data['url'] != null) {
-        await handleURL(url: event.data['url']);
-      }
-    });
+    FirebaseMessaging.onMessage.listen(handleFirebaseNotification);
+    FirebaseMessaging.onMessageOpenedApp.listen(handleFirebaseNotification);
     FirebaseMessaging.onBackgroundMessage(
       _firebaseMessagingBackgroundHandler,
     );
   }
 
-  void _handleForegroundNotification(
+  void handleFirebaseNotification(
     RemoteMessage? message,
   ) {
     final notification = message?.notification;
     final android = message?.notification?.android;
+    final apple = message?.notification?.apple;
     EventModel? event;
 
-    event = eventsLocalService.getEvents()?.data?.firstWhereOrNull(
+    event ??= eventsLocalService.getEvents()?.data?.firstWhereOrNull(
           (e) => e.id == message?.data['id'],
         );
     if (notification != null && android != null && event != null) {
+      flutterLocalNotificationsPlugin.show(
+        int.parse(event.id ?? '0'),
+        notification.title,
+        notification.body,
+        notificationDetails,
+        payload: message?.data['id'] ?? "0",
+      );
+    } else if (notification != null && apple != null && event != null) {
       flutterLocalNotificationsPlugin.show(
         int.parse(event.id ?? '0'),
         notification.title,
@@ -231,6 +259,10 @@ LocalNotificationsService localNotificationsService(Ref ref) {
       enableVibration: true,
       autoCancel: true,
       visibility: NotificationVisibility.public,
+      color: Colors.red,
+      largeIcon: DrawableResourceAndroidBitmap('mipmap/ic_launcher'),
+      styleInformation: BigTextStyleInformation(''),
+      subText: '',
     ),
     iOS: const DarwinNotificationDetails(
       presentAlert: true,
@@ -252,8 +284,4 @@ Future<void> backgroundHandler(
     NotificationResponse notificationResponse) async {}
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (message.data.containsKey('id') && message.data['id'] != null) {
-    log("Event ID: ${message.data['id']}");
-  }
-}
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}

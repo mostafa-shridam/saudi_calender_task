@@ -53,7 +53,6 @@ class _CustomEventWidgetState extends ConsumerState<CustomEventWidget> {
     } catch (e) {
       log("Error showing notification: $e");
     }
-
   }
 
   @override
@@ -61,7 +60,6 @@ class _CustomEventWidgetState extends ConsumerState<CustomEventWidget> {
     final category = ref.watch(categoriesProvider.select((v) => v.data
         ?.firstWhereOrNull(
             (e) => e.id == widget.eventModel.section?.category?.id)));
-
     return GestureDetector(
       onTap: () {
         context.pushNamed(
