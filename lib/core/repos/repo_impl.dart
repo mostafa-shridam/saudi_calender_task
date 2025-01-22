@@ -25,8 +25,7 @@ class RepoImpl implements Repo {
       final saveEvents =  eventsLocalService.saveEvents(jsonEncode(eventsData));
       return saveEvents;
     } catch (e) {
-      log(e.toString());
-      throw Exception("Failed to save events: ${e.toString()}");
+      log("Error saving events: ${e.toString()}");
     }
   }
 
@@ -38,11 +37,11 @@ class RepoImpl implements Repo {
         return eventData;
       } else {
         log("No events found in local storage.");
-        throw Exception("No events found in local storage.");
+        return Events(data: []);
       }
     } catch (e) {
       log("Error fetching events: ${e.toString()}");
-      throw Exception("Error fetching events.");
+      return Events(data: []);
     }
   }
 

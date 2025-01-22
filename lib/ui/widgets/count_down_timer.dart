@@ -26,7 +26,7 @@ class CountDownTimer extends StatelessWidget {
           ));
         }
         final daysText = (time.days ?? 0) < 10 ? 'أيام' : 'يوم';
-        final hoursText = (time.hours ?? 0) > 10 ? 'ساعات' : 'ساعة';
+        final hoursText = (time.hours ?? 0) < 10 ? 'ساعات' : 'ساعة';
         final minutesText = (time.min ?? 0) < 10 ? 'دقائق' : 'دقيقة';
         final secondsText = (time.sec ?? 0) < 10 ? 'ثواني' : 'ثانية';
 

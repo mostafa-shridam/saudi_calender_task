@@ -27,16 +27,10 @@ class _MainPageState extends ConsumerState<MainPage> {
     super.initState();
     Future.microtask(() async {
       await ref.read(eventProvider.notifier).getEvents();
-      await ref.read(localNotificationsServiceProvider).initNotify(
-            context,
-          );
-      await ref.read(localNotificationsServiceProvider).initOneSignal();
+      await ref.read(localNotificationsServiceProvider).init(context);
       await ref
           .read(localNotificationsServiceProvider)
-          .initFirebaseMessaging(context: context);
-      ref
-          .read(localNotificationsServiceProvider)
-          .oneSignalNotifications(context: context);
+          .handleBackgroundNotification(context,);
     });
   }
 

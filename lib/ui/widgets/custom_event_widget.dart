@@ -44,7 +44,7 @@ class _CustomEventWidgetState extends ConsumerState<CustomEventWidget> {
           ) ??
           DateTime.now();
 
-      localNotificationsService.showScheduleNotification(
+      localNotificationsService.showNotification(
         id: widget.eventModel.id.toString(),
         body: widget.eventModel.title ?? "",
         dateTime: eventDate,

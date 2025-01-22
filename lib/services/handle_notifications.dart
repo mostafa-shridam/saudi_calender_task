@@ -11,6 +11,8 @@ import 'package:saudi_calender_task/models/event_model.dart';
 import '../core/local_service/events_local_service.dart';
 import '../remote_service/event_service.dart';
 import '../ui/pages/details/details_page.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 part 'generated/handle_notifications.g.dart';
 
 class HandleNotifications {
@@ -19,7 +21,7 @@ class HandleNotifications {
 
   HandleNotifications(
       {required this.eventsLocalService, required this.eventsRemoteService});
-  Future<void> handleEvent(BuildContext context, int? eventId) async {
+  Future<void> handleEvent(BuildContext context, String? eventId) async {
     EventModel? event;
 
     event = eventsLocalService.getEvents()?.data?.firstWhereOrNull(
@@ -45,7 +47,7 @@ class HandleNotifications {
     if (message != null) {
       handleEvent(
         context,
-        int.tryParse(message),
+        message,
       );
     } else {
       log("No event ID found in the notification data.");
@@ -65,6 +67,13 @@ class HandleNotifications {
       context.pushNamed(pageName);
     }
     return;
+  }
+
+  Future<void> handleURL({required String url}) async {
+    await launchUrlString(
+      url,
+      mode: LaunchMode.externalApplication,
+    );
   }
 }
 

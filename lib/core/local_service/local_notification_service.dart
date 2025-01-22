@@ -3,20 +3,14 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:collection/collection.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:saudi_calender_task/remote_service/event_service.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import '../../constants.dart';
-import '../../firebase_options.dart';
-import '../../models/event_model.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:saudi_calender_task/constants.dart';
+import 'package:timezone/timezone.dart' as tz;
 import '../../services/handle_notifications.dart';
 import '../../core/local_service/events_local_service.dart';
 
@@ -28,15 +22,20 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 class LocalNotificationsService {
   final NotificationDetails notificationDetails;
   final EventsLocalService eventsLocalService;
-  final EventRemoteService eventRemoteService;
   final HandleNotifications handleNotifications;
 
   LocalNotificationsService({
     required this.notificationDetails,
-    required this.eventRemoteService,
-    required this.handleNotifications,
     required this.eventsLocalService,
+    required this.handleNotifications,
   });
+
+  Future<void> init(BuildContext context) async {
+    await _requestPermissions();
+    await _initLocalNotifications(context);
+    await _initFirebaseMessaging(context);
+    await _initOneSignal(context);
+  }
 
   Future<void> _requestPermissions() async {
     if (Platform.isAndroid) {
@@ -44,10 +43,6 @@ class LocalNotificationsService {
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>()
           ?.requestNotificationsPermission();
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestExactAlarmsPermission();
     } else {
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -56,49 +51,82 @@ class LocalNotificationsService {
             sound: true,
             alert: true,
             badge: true,
-            critical: true,
           );
     }
   }
 
-  Future<void> initNotify(BuildContext context) async {
-    await _requestPermissions();
-
+  Future<void> _initLocalNotifications(BuildContext context) async {
     const initializationSettings = InitializationSettings(
       android: AndroidInitializationSettings('mipmap/ic_launcher'),
-      iOS: DarwinInitializationSettings(
-        requestAlertPermission: true,
-        requestBadgePermission: true,
-        requestSoundPermission: true,
-      ),
+      iOS: DarwinInitializationSettings(requestAlertPermission: true),
     );
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (response) =>
-          handleNotifications.handleEvent(
-        context,
-        int.tryParse(response.payload ?? ''),
-      ),
-      onDidReceiveBackgroundNotificationResponse: backgroundHandler,
+      onDidReceiveNotificationResponse: (response) {
+        handleLocalNotification(context, response);
+      },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
   }
 
-  Future<void> handleURL({required String url}) async {
-    await launchUrlString(url, mode: LaunchMode.externalApplication);
+  Future<void> _initFirebaseMessaging(BuildContext context) async {
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.instance.requestPermission();
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    log('FCM Token: $fcmToken');
+
+    FirebaseMessaging.onMessage.listen((message) => _handleFirebaseMessage);
+    FirebaseMessaging.onMessageOpenedApp
+        .listen((message) => _handleFirebaseMessage(context, message));
+    FirebaseMessaging.onBackgroundMessage(notificationTapBackgroundFirebase);
   }
 
-  Future<void> showScheduleNotification({
+  Future<void> _initOneSignal(BuildContext context) async {
+    OneSignal.initialize(appIdForOneSignal);
+    OneSignal.Notifications.addClickListener((response) async {
+      _handleOneSignalNotification(context, response);
+    });
+  }
+
+  void _handleFirebaseMessage(
+    BuildContext context,
+    RemoteMessage message,
+  ) async {
+    final id = message.data['id'];
+    final pageName = message.data['pageName'];
+    final url = message.data['url'];
+
+    if (id != null) {
+      handleNotifications.handleFirebaseMessage(context: context, message: id);
+    } else if (pageName != null) {
+      handleNotifications.handlePageRoute(context: context, pageName: pageName);
+    } else if (url != null) {
+      await handleNotifications.handleURL(url: url);
+    }
+  }
+
+  void _handleOneSignalNotification(BuildContext context, event) async {
+    final data = event.notification.additionalData;
+    final id = data?['id'];
+    final pageName = data?['pageName'];
+    final url = data?['url'];
+
+    if (id != null) {
+      handleNotifications.handleEvent(context, id);
+    } else if (pageName != null) {
+      handleNotifications.handlePageRoute(context: context, pageName: pageName);
+    } else if (url != null) {
+      await handleNotifications.handleURL(url: url);
+    }
+  }
+
+  Future<void> showNotification({
     required String id,
     required String title,
     required String body,
     required DateTime dateTime,
   }) async {
-    if (id.isEmpty) {
-      log('Notification id is empty.');
-      return;
-    }
-
     try {
       await flutterLocalNotificationsPlugin.zonedSchedule(
         int.parse(id),
@@ -117,132 +145,35 @@ class LocalNotificationsService {
     }
   }
 
-// one signal notifications init
-  Future<void> initOneSignal() async {
-    OneSignal.initialize(appIdForOneSignal);
-    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-    OneSignal.Notifications.lifecycleInit();
-    OneSignal.Notifications.requestPermission(true);
-  }
-
-// one signal notifications
-  void oneSignalNotifications({required BuildContext context}) async {
-    OneSignal.Notifications.addClickListener((event) async {
-      final eventId = event.notification.additionalData?["id"];
-      final url = event.notification.additionalData?["url"];
-      final pageName = event.notification.additionalData?["pageName"];
-      EventModel? events;
-
-      events ??= eventsLocalService.getEvents()?.data?.firstWhereOrNull(
-            (e) => e.id == eventId.toString(),
-          );
-      // check if notification has eventId and filter ids
-      if (events != null) {
-        handleNotifications.handleEvent(
-          context,
-          int.tryParse(events.id ?? "0"),
-        );
-        // check if notification has url
-      } else if (url != null) {
-        await handleURL(url: url);
-        // check if notification has pageName
-      } else if (pageName != null) {
-        final pageName = event.notification.additionalData?["pageName"];
-        if (pageName != null) {
-          handleNotifications.handlePageRoute(
-            context: context,
-            pageName: pageName,
-          );
-        }
-      }
-    });
-  }
-
-  Future<void> firebaseNotify({
-    required BuildContext context,
-    required RemoteMessage event,
-  }) async {
-    // check if notification has pageName
-    if (event.data['pageName'] != null) {
-      handleFirebaseNotification(
-        event,
-      );
-      handleNotifications.handlePageRoute(
-        context: context,
-        pageName: event.data['pageName'],
-      );
-      // check if notification has id
-    } else if (event.data['id'] != null) {
-      handleFirebaseNotification(
-        event,
-      );
-      handleNotifications.handleFirebaseMessage(
-        context: context,
-        message: event.data['id'],
-      );
-      // check if notification has url
-    } else if (event.data['url'] != null) {
-      await handleURL(url: event.data['url']);
+  //handle all local notification
+  Future<void> handleLocalNotification(
+      BuildContext context, NotificationResponse response) async {
+    if (response.payload != null) {
+      handleNotifications.handleEvent(context, response.payload ?? "0");
+    } else {
+      log("No event ID found in the notification data.");
     }
   }
 
-// init firebase notifications
-  Future<void> initFirebaseMessaging({
-    required BuildContext context,
-  }) async {
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    log('FCM Token: $fcmToken');
-
-    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    FirebaseMessaging.onMessage.listen(handleFirebaseNotification);
-    FirebaseMessaging.onMessageOpenedApp.listen(handleFirebaseNotification);
-    FirebaseMessaging.onBackgroundMessage(
-      _firebaseMessagingBackgroundHandler,
-    );
-  }
-
-  void handleFirebaseNotification(
-    RemoteMessage? message,
-  ) {
-    final notification = message?.notification;
-    final android = message?.notification?.android;
-    final apple = message?.notification?.apple;
-    EventModel? event;
-
-    event ??= eventsLocalService.getEvents()?.data?.firstWhereOrNull(
-          (e) => e.id == message?.data['id'],
-        );
-    if (notification != null && android != null && event != null) {
-      flutterLocalNotificationsPlugin.show(
-        int.parse(event.id ?? '0'),
-        notification.title,
-        notification.body,
-        notificationDetails,
-        payload: message?.data['id'] ?? "0",
-      );
-    } else if (notification != null && apple != null && event != null) {
-      flutterLocalNotificationsPlugin.show(
-        int.parse(event.id ?? '0'),
-        notification.title,
-        notification.body,
-        notificationDetails,
-        payload: message?.data['id'] ?? "0",
+  Future<void> handleBackgroundNotification(
+    BuildContext context,
+  ) async {
+    final details =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    if (details != null && details.didNotificationLaunchApp) {
+      handleLocalNotification(
+        context,
+        details.notificationResponse!,
       );
     }
   }
 }
 
+@pragma('vm:entry-point')
+Future<void> notificationTapBackground(NotificationResponse response) async {}
+
+@pragma('vm:entry-point')
+Future<void> notificationTapBackgroundFirebase(RemoteMessage message) async {}
 @Riverpod(keepAlive: true)
 LocalNotificationsService localNotificationsService(Ref ref) {
   final notificationDetails = NotificationDetails(
@@ -271,15 +202,7 @@ LocalNotificationsService localNotificationsService(Ref ref) {
 
   return LocalNotificationsService(
     notificationDetails: notificationDetails,
-    eventRemoteService: ref.watch(eventRemoteServiceStateProvider),
     handleNotifications: ref.watch(handleNotificationsProvider),
     eventsLocalService: ref.watch(eventsLocalServiceProvider),
   );
 }
-
-@pragma('vm:entry-point')
-Future<void> backgroundHandler(
-    NotificationResponse notificationResponse) async {}
-
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
