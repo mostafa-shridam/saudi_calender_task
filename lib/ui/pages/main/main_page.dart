@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:saudi_calender_task/gen/assets.gen.dart';
+import 'package:saudi_calender_task/services/home_widget_service.dart';
 import 'package:saudi_calender_task/ui/pages/home/home_page.dart';
 
 import '../../../core/local_service/local_notification_service.dart';
@@ -31,6 +32,10 @@ class _MainPageState extends ConsumerState<MainPage> {
       await ref
           .read(localNotificationsServiceProvider)
           .handleBackgroundNotification(context,);
+      final events = ref.watch(eventProvider).events?.data;
+     await HomeWidgetService.updateEventsWidget(
+        events ?? []
+      );
     });
   }
 

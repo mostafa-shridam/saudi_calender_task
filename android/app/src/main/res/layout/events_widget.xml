@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="12dp"
-    android:background="#FFF"
+    android:background="@drawable/widget_background"
     android:textDirection="rtl"
     android:orientation="vertical">
     <LinearLayout
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/today_date_background"
+        android:background="@drawable/event_border"
         android:orientation="horizontal">
         <TextView
             android:layout_weight="1"
@@ -20,37 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="textStart"
+            android:textColor="@color/text_color"
             android:textFontWeight="700"
             />
-<!--        <TextView-->
-<!--            android:layout_weight="8"-->
-<!--            android:id="@+id/todayDate1"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textAlignment="textStart"-->
-<!--            android:text="اليوم "-->
-<!--            android:textFontWeight="700"-->
-<!--            android:textColor="#245D3A"-->
-<!--            />-->
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/serverMessageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center">
-        <TextView
-            android:id="@+id/backendMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:padding="0dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/today_date_background"
-            android:textFontWeight="700"
-            android:textColor="#245D3A"
-            />
     </LinearLayout>
 
     <LinearLayout
@@ -59,7 +32,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="6dp"
-        android:background="@drawable/event_background"
+        android:background="@drawable/event_border"
         android:orientation="horizontal"
         android:layout_marginVertical="4dp">
 
@@ -70,13 +43,15 @@
             android:layout_marginEnd="4dp"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/days_count_background">
+            >
 
             <TextView
                 android:id="@+id/event1_days"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:background="@drawable/date_background"
+                android:textColor="@color/text_color"
                 android:textFontWeight="900"/>
 
         </LinearLayout>
@@ -92,11 +67,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:textColor="@color/text_color"
                 android:textFontWeight="700"/>
 
             <TextView
                 android:id="@+id/event1_date"
                 android:layout_width="match_parent"
+                android:textColor="@color/text_color"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
@@ -106,12 +83,11 @@
     </LinearLayout>
 
     <LinearLayout
-
         android:id="@+id/event2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="6dp"
-        android:background="@drawable/event_background"
+        android:background="@drawable/event_border"
         android:orientation="horizontal"
         android:layout_marginVertical="4dp">
 
@@ -124,13 +100,15 @@
             android:layout_marginEnd="4dp"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/days_count_background">
+           >
 
             <TextView
                 android:id="@+id/event2_days"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:background="@drawable/date_background"
+                android:textColor="@color/text_color"
                 android:textFontWeight="900"/>
 
         </LinearLayout>
@@ -146,11 +124,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:textColor="@color/text_color"
                 android:textFontWeight="700"/>
 
             <TextView
                 android:id="@+id/event2_date"
                 android:layout_width="match_parent"
+                android:textColor="@color/text_color"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
@@ -160,12 +140,11 @@
     </LinearLayout>
 
     <LinearLayout
-
         android:id="@+id/event3"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="6dp"
-        android:background="@drawable/event_background"
+        android:background="@drawable/event_border"
         android:orientation="horizontal"
         android:layout_marginVertical="4dp">
 
@@ -174,13 +153,15 @@
             android:layout_marginEnd="4dp"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/days_count_background">
+            >
 
             <TextView
                 android:id="@+id/event3_days"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:background="@drawable/date_background"
+                android:textColor="@color/text_color"
                 android:textFontWeight="900"/>
 
         </LinearLayout>
@@ -196,11 +177,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:textColor="@color/text_color"
                 android:textFontWeight="700"/>
 
             <TextView
                 android:id="@+id/event3_date"
                 android:layout_width="match_parent"
+                android:textColor="@color/text_color"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
@@ -213,7 +196,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="6dp"
-        android:background="@drawable/event_background"
+        android:background="@drawable/event_border"
         android:orientation="horizontal"
         android:layout_marginVertical="4dp">
 
@@ -222,13 +205,15 @@
             android:layout_marginEnd="4dp"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/days_count_background">
+            >
 
             <TextView
                 android:id="@+id/event4_days"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:background="@drawable/date_background"
+                android:textColor="@color/text_color"
                 android:textFontWeight="900"/>
 
         </LinearLayout>
@@ -244,11 +229,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:textColor="@color/text_color"
                 android:textFontWeight="700"/>
 
             <TextView
                 android:id="@+id/event4_date"
                 android:layout_width="match_parent"
+                android:textColor="@color/text_color"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
@@ -261,7 +248,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="6dp"
-        android:background="@drawable/event_background"
+        android:background="@drawable/event_border"
         android:orientation="horizontal"
         android:layout_marginVertical="4dp">
 
@@ -270,7 +257,6 @@
             android:layout_marginEnd="4dp"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/days_count_background"
             >
 
             <TextView
@@ -278,6 +264,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:background="@drawable/date_background"
+                android:textColor="@color/text_color"
                 android:textFontWeight="900"/>
 
         </LinearLayout>
@@ -293,11 +281,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:textColor="@color/text_color"
                 android:textFontWeight="700"/>
 
             <TextView
                 android:id="@+id/event5_date"
                 android:layout_width="match_parent"
+                android:textColor="@color/text_color"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 

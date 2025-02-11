@@ -2,7 +2,7 @@
 <appwidget-provider
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/events_widget"
-    android:initialLayout="@layout/events_widget"
+    android:initialLayout="@layout/e"
     android:minHeight="250px"
     android:minWidth="400px"
     android:minResizeWidth="250px"

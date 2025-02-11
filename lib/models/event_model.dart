@@ -1,3 +1,7 @@
+import 'package:intl/intl.dart';
+
+import '../constants.dart';
+
 class EventModel {
   String? id;
   String? title;
@@ -53,6 +57,19 @@ class EventModel {
       'section': section?.toJson(),
     };
   }
+
+  DateTime? get startsAtDateTime =>
+      DateFormat(eventsDateFormat, 'en').tryParse(startsAt ?? '');
+
+  DateTime? get endsAtDateTime =>
+      DateFormat(eventsDateFormat, 'en').tryParse(eventDate ?? '');
+  Map<String, dynamic> toWidgetJson(
+      {required bool isAndroid}) {
+    return {
+      'eventId': id.toString(),
+      'title': title,
+      'eventDate': (isAndroid ? startsAtDateTime?.toLocal() : startsAtDateTime?.toUtc())?.toIso8601String(),
+    };}
 }
 
 class Section {

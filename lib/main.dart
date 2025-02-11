@@ -11,6 +11,7 @@ import 'package:saudi_calender_task/core/local_service/local_storage.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
 import 'package:saudi_calender_task/gen/fonts.gen.dart';
 import 'package:saudi_calender_task/services/get_it_service.dart';
+import 'package:saudi_calender_task/services/home_widget_service.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'core/router/routes.dart';
@@ -24,6 +25,7 @@ void main() async {
   await Future.wait([
     EasyLocalization.ensureInitialized(),
     LocalStorage.instance.init(),
+    HomeWidgetService().init(),
     configureLocalTimeZone(),
     Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,

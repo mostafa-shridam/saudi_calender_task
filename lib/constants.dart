@@ -6,3 +6,7 @@ const categriesBaseUrl = "categories?type=1&page=0&limit=0";
 const newsBaseUrl = "news";
 const String appName = "Saudi Calender";
 const String appIdForOneSignal = "f4e6a025-6215-4347-a1ad-0aab33f2260e";
+const String appGroupId = "saudi.appGroupId.com";
+const String iosWidgetName = 'LastEventsWidget';
+const String androidWidgetName = 'EventsWidget';
+const eventsDateFormat = 'yyyy-MM-dd hh:mm a';
