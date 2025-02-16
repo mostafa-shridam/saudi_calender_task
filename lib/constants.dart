@@ -10,3 +10,4 @@ const String appGroupId = "saudi.appGroupId.com";
 const String iosWidgetName = 'LastEventsWidget';
 const String androidWidgetName = 'EventsWidget';
 const eventsDateFormat = 'yyyy-MM-dd hh:mm a';
+const selectedDateFormat = "dd MMM yyyy";

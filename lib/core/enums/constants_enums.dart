@@ -8,4 +8,8 @@ enum ConstantsEnums {
   news,
   newsKey,
   section,
+  saveUserData,
+  myEventsKey,
+  myEventKey,
+  myCategoryKey,
 }

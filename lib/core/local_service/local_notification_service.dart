@@ -121,7 +121,7 @@ class LocalNotificationsService {
     }
   }
 
-  Future<void> showNotification({
+  Future<void> showScheduleNotification({
     required String id,
     required String title,
     required String body,

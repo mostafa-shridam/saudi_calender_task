@@ -1,6 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saudi_calender_task/core/enums/constants_enums.dart';
-
+part 'generated/local_storage.g.dart';
 class LocalStorage {
   LocalStorage._internal();
   static final LocalStorage _singleton = LocalStorage._internal();
@@ -33,3 +35,6 @@ class LocalStorage {
     await box.clear();
   }
 }
+@Riverpod(keepAlive: true)
+
+LocalStorage localStorage(Ref ref) => LocalStorage.instance;

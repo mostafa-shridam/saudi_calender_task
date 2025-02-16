@@ -5,7 +5,7 @@ import 'package:saudi_calender_task/ui/widgets/hijri_date.dart';
 class EventData extends StatelessWidget {
   const EventData({
     super.key,
-    required this.eventModel,
+     required this.eventModel,
   });
   final EventModel eventModel;
 

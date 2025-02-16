@@ -100,15 +100,17 @@ class EventState {
 
   EventState({this.events, this.isLoading, this.category});
 
-  EventState copyWith(
-      {Events? events,
-      bool? isLoading,
-      CategoryModel? category,
-      EventModel? event}) {
+  EventState copyWith({
+    Events? events,
+    bool? isLoading,
+    CategoryModel? category,
+    EventModel? event,
+  }) {
     return EventState(
-        events: events ?? this.events,
-        isLoading: isLoading ?? this.isLoading,
-        category: category ?? this.category);
+      events: events ?? this.events,
+      isLoading: isLoading ?? this.isLoading,
+      category: category ?? this.category,
+    );
   }
 }
 

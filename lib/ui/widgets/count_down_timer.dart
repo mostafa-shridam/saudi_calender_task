@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/index.dart';
+import 'package:intl/intl.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
 import 'package:saudi_calender_task/ui/widgets/hijri_date.dart';
 
@@ -9,10 +11,8 @@ class CountDownTimer extends StatelessWidget {
   final bool makeAsRow;
   @override
   Widget build(BuildContext context) {
-    final DateTime endTimeDateTime = DateTime.parse(date.split(" ")[0]);
-
-    final int endTime = endTimeDateTime.millisecondsSinceEpoch;
-
+    final formate = DateFormat('yyyy-MM-dd HH:mm').parse(date);
+    final endTime = formate.millisecondsSinceEpoch;
     return CountdownTimer(
       onEnd: () {},
       endTime: endTime,
@@ -25,7 +25,7 @@ class CountDownTimer extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium,
           ));
         }
-        final daysText = (time.days ?? 0) < 10 ? 'أيام' : 'يوم';
+        final daysText = (time.days ?? 0) < 11 ? 'أيام' : 'يوم';
         final hoursText = (time.hours ?? 0) < 10 ? 'ساعات' : 'ساعة';
         final minutesText = (time.min ?? 0) < 10 ? 'دقائق' : 'دقيقة';
         final secondsText = (time.sec ?? 0) < 10 ? 'ثواني' : 'ثانية';
@@ -128,7 +128,7 @@ class CountDownTimer extends StatelessWidget {
               // Show seconds if under 1 minute left
               if ((time.days ?? 0) == 0 &&
                   (time.hours ?? 0) == 0 &&
-                  (time.min ?? 0) > 0 &&
+                  (time.min ?? 0) == 0 &&
                   (time.sec ?? 0) > 0)
                 Text(
                   "${time.sec ?? 0}",
@@ -138,7 +138,7 @@ class CountDownTimer extends StatelessWidget {
                 ),
               if ((time.days ?? 0) == 0 &&
                   (time.hours ?? 0) == 0 &&
-                  (time.min ?? 0) > 0 &&
+                  (time.min ?? 0) == 0 &&
                   (time.sec ?? 0) > 0)
                 Text(
                   secondsText,

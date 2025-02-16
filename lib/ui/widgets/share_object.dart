@@ -6,20 +6,28 @@ import '../../core/theme/app_theme.dart';
 import '../../core/mixins/share_app.dart';
 
 class ShareObject extends StatelessWidget {
-  const ShareObject(
-      {super.key,
-      required this.onTapDown,
-      required this.icon,
-      required this.label});
+  const ShareObject({
+    super.key,
+    this.onTapDown,
+    required this.icon,
+    required this.label,
+    this.color,
+    this.width = 187,
+    this.onTap,
+  });
   final void Function(TapDownDetails)? onTapDown;
+  final void Function()? onTap;
   final String icon, label;
+  final Color? color;
+  final double width;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: onTapDown,
+      onTap: onTap,
       child: Container(
         height: 74,
-        width: 187,
+        width: width,
         decoration: BoxDecoration(
           color: graySwatch.shade50,
           borderRadius: BorderRadius.circular(8),
@@ -28,7 +36,17 @@ class ShareObject extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(icon),
+            color == null
+                ? SvgPicture.asset(
+                    icon,
+                  )
+                : SvgPicture.asset(
+                    icon,
+                    colorFilter: ColorFilter.mode(
+                      color ?? Colors.black,
+                      BlendMode.srcIn,
+                    ),
+                  ),
             Text(
               label,
             ),

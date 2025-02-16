@@ -55,6 +55,9 @@ class $AssetsFontsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/Group.svg
+  String get group => 'assets/images/Group.svg';
+
   /// File path: assets/images/Icon.png
   AssetGenImage get icon => const AssetGenImage('assets/images/Icon.png');
 
@@ -89,6 +92,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/document-text.svg
   String get documentText => 'assets/images/document-text.svg';
 
+  /// File path: assets/images/edit.svg
+  String get edit => 'assets/images/edit.svg';
+
   /// File path: assets/images/eventImage.png
   AssetGenImage get eventImage =>
       const AssetGenImage('assets/images/eventImage.png');
@@ -105,6 +111,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/gift.svg
   String get gift => 'assets/images/gift.svg';
+
+  /// File path: assets/images/google.svg
+  String get google => 'assets/images/google.svg';
 
   /// File path: assets/images/mobile.svg
   String get mobile => 'assets/images/mobile.svg';
@@ -129,11 +138,15 @@ class $AssetsImagesGen {
   /// File path: assets/images/timer.svg
   String get timer => 'assets/images/timer.svg';
 
+  /// File path: assets/images/trash.svg
+  String get trash => 'assets/images/trash.svg';
+
   /// File path: assets/images/whatsapp.svg
   String get whatsapp => 'assets/images/whatsapp.svg';
 
   /// List of all assets
   List<dynamic> get values => [
+        group,
         icon,
         archive,
         arrowSwapHorizontal,
@@ -145,11 +158,13 @@ class $AssetsImagesGen {
         calendarUnsSelected,
         cardImage,
         documentText,
+        edit,
         eventImage,
         eventImage1,
         export,
         gallerySlash,
         gift,
+        google,
         mobile,
         moneys,
         newsPoster,
@@ -157,6 +172,7 @@ class $AssetsImagesGen {
         setting2,
         share,
         timer,
+        trash,
         whatsapp
       ];
 }
