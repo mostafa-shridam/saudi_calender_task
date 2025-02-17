@@ -86,7 +86,7 @@ class FirebaseAuthService {
       return (await FirebaseAuth.instance.signInWithCredential(credential))
           .user!;
     } on FirebaseAuthException catch (e) {
-      log("CustomExceptionInFirebaseAuthException SignInWithFacebook: ${e.toString()}");
+      log("CustomExceptionInFirebaseAuthException SignInWithGoogle: ${e.toString()}");
 
       if (e.code == 'network-request-failed') {
         throw CustomException(message: "تحقق من اتصالك بالانترنت");
@@ -99,7 +99,7 @@ class FirebaseAuthService {
     }
   }
 
-  bool isSignedIn() {
+  bool? isSignedIn() {
     return FirebaseAuth.instance.currentUser != null;
   }
 }

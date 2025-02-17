@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:saudi_calender_task/constants.dart';
+import 'package:saudi_calender_task/core/constants/constants.dart';
 
 class DioService {
   final Dio dio = Dio();

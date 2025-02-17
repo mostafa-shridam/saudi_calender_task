@@ -3,12 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
 import 'package:saudi_calender_task/models/my_event.dart';
 import 'package:saudi_calender_task/ui/pages/my_event_details/my_event_details.dart';
 import 'package:saudi_calender_task/ui/widgets/time_left.dart';
 
-import '../../../../constants.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../core/local_service/local_notification_service.dart';
 import '../../../widgets/hijri_date.dart';
 
@@ -26,21 +27,15 @@ class _MyEventDataState extends ConsumerState<MyEventData> {
         ref.read(localNotificationsServiceProvider);
 
     try {
-      final eventDate = DateTime.tryParse(
-            widget.myEvent.eventDate?.split(" ")[0] ??
-                DateTime.now().toString(),
-          ) ??
-          DateTime.now();
-
-      final result = await localNotificationsService.showScheduleNotification(
+      DateTime formattedDate = DateFormat(eventsDateFormat)
+          .parse(widget.myEvent.eventDate ?? DateTime.now().toIso8601String());
+      localNotificationsService.showScheduleNotification(
         id: widget.myEvent.id.hashCode,
+        payload: widget.myEvent.id ?? "",
         body: widget.myEvent.title ?? "",
-        dateTime: eventDate,
+        dateTime: formattedDate,
         title: appName.toString(),
       );
-      if (result) {
-        log("Notification shown");
-      }
     } catch (e) {
       log("Error showing notification: $e");
     }
@@ -49,7 +44,7 @@ class _MyEventDataState extends ConsumerState<MyEventData> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => _notification());
+    _notification();
   }
 
   @override

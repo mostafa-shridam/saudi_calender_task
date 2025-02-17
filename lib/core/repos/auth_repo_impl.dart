@@ -17,15 +17,17 @@ import '../err/failures.dart';
 import 'auth_repo.dart';
 part 'generated/auth_repo_impl.g.dart';
 
-class AuthRepoIml extends AuthRepo {
+class AuthRepoIml implements AuthRepo {
   final FirebaseAuthService firebaseAuthService;
   final DatabaseService databaseService;
   final LocalStorage localStorage;
+
   AuthRepoIml({
     required this.databaseService,
     required this.firebaseAuthService,
     required this.localStorage,
   });
+
   @override
   Future<Either<Failure, UserModel>> createUserWithEmailAndPassword(
       String email, String password, String name) async {
@@ -46,22 +48,11 @@ class AuthRepoIml extends AuthRepo {
       return right(userModel);
     } on CustomException catch (e) {
       await deleteUser(user);
-      return left(
-        ServerFailure(
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(message: e.message));
     } catch (e) {
       await deleteUser(user);
-      log(
-        'Exception in AuthRepoImpl.createUserWithEmailAndPassword: ${e.toString()}',
-      );
-
-      return left(
-        ServerFailure(
-          message: "حدث خطأ ما الرجاء المحاولة لاحقا",
-        ),
-      );
+      log('Exception in AuthRepoImpl.createUserWithEmailAndPassword: ${e.toString()}');
+      return left(ServerFailure(message: "حدث خطأ ما الرجاء المحاولة لاحقا"));
     }
   }
 
@@ -90,23 +81,11 @@ class AuthRepoIml extends AuthRepo {
       return right(userEntity);
     } on CustomException catch (e) {
       await deleteUser(user);
-
-      return left(
-        ServerFailure(
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(message: e.message));
     } catch (e) {
       await deleteUser(user);
-      log(
-        'Exception in AuthRepoImpl.signInWithEmailAndPassword: ${e.toString()}',
-      );
-
-      return left(
-        ServerFailure(
-          message: "حدث خطأ ما الرجاء المحاولة لاحقا",
-        ),
-      );
+      log('Exception in AuthRepoImpl.signInWithEmailAndPassword: ${e.toString()}');
+      return left(ServerFailure(message: "حدث خطأ ما الرجاء المحاولة لاحقا"));
     }
   }
 
@@ -119,7 +98,7 @@ class AuthRepoIml extends AuthRepo {
       var userEntity = UserModel.fromFirebaseUser(user);
 
       var isUserExist = await databaseService.checkIfDataExists(
-          path: BackendEndpoint.isUserExists, documentId: user.uid);
+          path: BackendEndpoint.users, documentId: user.uid);
       if (isUserExist) {
         await getUserData(uid: user.uid);
         await saveUserData(user: userEntity);
@@ -131,23 +110,11 @@ class AuthRepoIml extends AuthRepo {
       return right(userEntity);
     } on CustomException catch (e) {
       await deleteUser(user);
-      return left(
-        ServerFailure(
-          message: e.message,
-        ),
-      );
+      return left(ServerFailure(message: e.message));
     } catch (e) {
       await deleteUser(user);
-
-      log(
-        'Exception in AuthRepoImpl.aignInWithGoogle: ${e.toString()}',
-      );
-
-      return left(
-        ServerFailure(
-          message: "حدث خطأ ما الرجاء المحاولة لاحقا",
-        ),
-      );
+      log('Exception in AuthRepoImpl.signInWithGoogle: ${e.toString()}');
+      return left(ServerFailure(message: "حدث خطأ ما الرجاء المحاولة لاحقا"));
     }
   }
 
@@ -157,27 +124,36 @@ class AuthRepoIml extends AuthRepo {
   }
 
   @override
-  Future addUserData({required UserModel user}) async {
+  Future<void> addUserData({required UserModel? user}) async {
     await databaseService.addData(
-      documentId: user.uId,
-      path: BackendEndpoint.addUserData,
-      data: user.toMap(),
+      documentId: user?.uId,
+      path: BackendEndpoint.users,
+      data: user?.toMap(),
     );
   }
 
   @override
   Future<UserModel> getUserData({required String uid}) async {
     var userData = await databaseService.getData(
-      path: BackendEndpoint.getUserData,
+      path: BackendEndpoint.users,
       documentId: uid,
     );
     return UserModel.fromJson(userData);
   }
 
   @override
-  Future saveUserData({required UserModel user}) async {
-    var jsonData = jsonEncode(user.toMap());
-    await localStorage.put(ConstantsEnums.saveUserData.name, jsonData);
+  Future<void> saveUserData({required UserModel? user}) async {
+    await localStorage.put(
+        ConstantsEnums.saveUserData.name, jsonEncode(user?.toMap()));
+  }
+
+  @override
+  UserModel? getUserDataLocal() {
+    final data = localStorage.get(ConstantsEnums.saveUserData.name);
+    if (data == null) {
+      return null;
+    }
+    return UserModel.fromJson(jsonDecode(data));
   }
 }
 

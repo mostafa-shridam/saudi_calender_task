@@ -8,7 +8,7 @@ part 'generated/data_services.g.dart';
 abstract class DatabaseService {
   Future<bool> addData({
     required String path,
-    required Map<String, dynamic> data,
+    required Map<String, dynamic>? data,
     String? documentId,
   });
   Future<dynamic> getData({

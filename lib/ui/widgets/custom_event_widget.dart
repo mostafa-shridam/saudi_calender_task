@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../constants.dart';
+import '../../core/constants/constants.dart';
 import '../../core/local_service/local_notification_service.dart';
 import '../../core/theme/app_theme.dart';
 import '../../gen/assets.gen.dart';
 import '../../models/event_model.dart';
-import '../../remote_service/categories_service.dart';
+import '../../providers/categories_provider.dart';
 import '../pages/details/details_page.dart';
 import '../pages/home/widgets/event_data.dart';
 import 'time_left.dart';
@@ -46,6 +46,7 @@ class _CustomEventWidgetState extends ConsumerState<CustomEventWidget> {
 
       localNotificationsService.showScheduleNotification(
         id: widget.eventModel.id.hashCode,
+        payload: widget.eventModel.id ?? "",
         body: widget.eventModel.title ?? "",
         dateTime: eventDate,
         title: appName.toString(),

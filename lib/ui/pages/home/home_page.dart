@@ -5,7 +5,7 @@ import 'package:saudi_calender_task/ui/pages/home/widgets/category_list.dart';
 import 'package:saudi_calender_task/ui/widgets/ad_space.dart';
 import 'package:saudi_calender_task/ui/widgets/send_gift.dart';
 import 'package:saudi_calender_task/ui/widgets/today_date.dart';
-import '../../../remote_service/event_service.dart';
+import '../../../providers/event_provider.dart';
 
 import 'widgets/alert_warning.dart';
 import '../../widgets/custom_event_widget.dart';

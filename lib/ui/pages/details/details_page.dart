@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saudi_calender_task/models/event_model.dart';
 
 import '../../../gen/assets.gen.dart';
-import '../../../remote_service/event_service.dart';
+import '../../../providers/event_provider.dart';
 import '../../widgets/ad_space.dart';
 import '../../widgets/custom_divider.dart';
 import '../../widgets/event_date_details.dart';

@@ -1,9 +1,12 @@
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/index.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:intl/intl.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
 import 'package:saudi_calender_task/ui/widgets/hijri_date.dart';
+
+import '../../core/constants/constants.dart';
 
 class CountDownTimer extends StatelessWidget {
   const CountDownTimer({super.key, required this.date, this.makeAsRow = false});
@@ -11,8 +14,10 @@ class CountDownTimer extends StatelessWidget {
   final bool makeAsRow;
   @override
   Widget build(BuildContext context) {
-    final formate = DateFormat("yyyy-MM-dd HH:mm").tryParse(date) ?? DateTime.now();
-    final endTime = formate.millisecondsSinceEpoch;
+    log("Date: $date");
+    DateTime formattedDate = DateFormat(eventsDateFormat).parse(date);
+    log("Formatted date: $formattedDate");
+    final int endTime = formattedDate.millisecondsSinceEpoch;
     return CountdownTimer(
       onEnd: () {},
       endTime: endTime,
@@ -76,7 +81,7 @@ class CountDownTimer extends StatelessWidget {
               // Show days if available
               if ((time.days ?? 0) > 0)
                 Text(
-                  "${time.days ?? 0}",
+                  "${time.days! + 1}",
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               if ((time.days ?? 0) > 0)

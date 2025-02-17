@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:saudi_calender_task/models/category_model.dart';
-import 'package:saudi_calender_task/remote_service/event_service.dart';
+import 'package:saudi_calender_task/providers/event_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../gen/assets.gen.dart';
-import '../../../../remote_service/categories_service.dart';
+import '../../../../providers/categories_provider.dart';
 
 class CategoryList extends StatelessWidget {
   const CategoryList({

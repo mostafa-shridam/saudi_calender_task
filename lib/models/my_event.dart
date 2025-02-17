@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-import '../constants.dart';
+import '../core/constants/constants.dart';
 
 class MyEvent {
   String? id;

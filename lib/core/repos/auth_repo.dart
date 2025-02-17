@@ -1,5 +1,3 @@
-
-
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:saudi_calender_task/models/user_model.dart';
@@ -14,11 +12,14 @@ abstract class AuthRepo {
     String email,
     String password,
   );
-  Future addUserData({required UserModel user});
-  Future getUserData({required String uid});
-  Future saveUserData({required UserModel user});
+  Future<void> addUserData({required UserModel user});
+  Future<void> getUserData({required String uid});
+  Future<void> saveUserData({required UserModel user});
 
-  Future<Either<Failure, UserModel>> signInWithGoogle();
-  Future deleteUser(User? user);
-  Future signOut();
+  Future<Either<Failure, UserModel?>?>? signInWithGoogle();
+  Future<void> deleteUser(User? user);
+  Future<void> signOut();
+  UserModel? getUserDataLocal() {
+    return null;
+  }
 }

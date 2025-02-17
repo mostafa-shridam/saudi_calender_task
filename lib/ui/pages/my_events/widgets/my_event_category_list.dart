@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:saudi_calender_task/providers/my_event_service.dart';
+import 'package:saudi_calender_task/providers/my_event_provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../gen/assets.gen.dart';
@@ -71,8 +70,11 @@ class _MyEventCategoryListItemsState
   Widget build(BuildContext context) {
     final category = ref.watch(myEventServiceProvider).categories ??
         [
-          MyEventCategory.fromJson(
-              {"id": "0", "name": "عام", "color": graySwatch.shade400.toARGB32()}),
+          MyEventCategory.fromJson({
+            "id": "0",
+            "name": "عام",
+            "color": graySwatch.shade400.toARGB32()
+          }),
         ];
     // remove duplicates
 
@@ -91,7 +93,8 @@ class _MyEventCategoryListItemsState
       return uniqueCategories;
     }
 
-  List<MyEventCategory> uniqeCategory = removeDuplicates(categories: category);
+    List<MyEventCategory> uniqeCategory =
+        removeDuplicates(categories: category);
     return Expanded(
       child: SizedBox(
         height: 37,
@@ -108,7 +111,8 @@ class _MyEventCategoryListItemsState
               }),
               child: MyEventSelectItem(
                 index: index,
-                color: Color(uniqeCategory[index].color ?? graySwatch.toARGB32()),
+                color:
+                    Color(uniqeCategory[index].color ?? graySwatch.toARGB32()),
                 title: uniqeCategory[index].name ?? "",
                 currentIndex: currentIndex,
               ),

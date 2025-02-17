@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../constants.dart';
+import '../../../../core/constants/constants.dart';
 import 'list_tile_date_of_event.dart';
 import 'select_event_date.dart';
 

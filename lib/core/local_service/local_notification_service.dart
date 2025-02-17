@@ -9,7 +9,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:saudi_calender_task/constants.dart';
+import 'package:saudi_calender_task/core/constants/constants.dart';
+import 'package:saudi_calender_task/core/local_service/my_events_local_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 import '../../services/handle_notifications.dart';
 import '../../core/local_service/events_local_service.dart';
@@ -123,20 +124,24 @@ class LocalNotificationsService {
 
   Future<bool> showScheduleNotification({
     required int id,
+    required String payload,
     required String title,
     required String body,
     required DateTime dateTime,
   }) async {
     try {
+      final tz.TZDateTime scheduledTime =
+          tz.TZDateTime.from(dateTime, tz.local);
+
       await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
         body,
-        tz.TZDateTime.from(dateTime, tz.local),
+        scheduledTime,
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.dateAndTime,
-        payload: id.toString(),
+        payload: payload,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
       );
@@ -193,7 +198,6 @@ LocalNotificationsService localNotificationsService(Ref ref) {
       enableVibration: true,
       autoCancel: true,
       visibility: NotificationVisibility.public,
-      largeIcon: DrawableResourceAndroidBitmap('mipmap/ic_launcher'),
     ),
     iOS: const DarwinNotificationDetails(
       presentAlert: true,

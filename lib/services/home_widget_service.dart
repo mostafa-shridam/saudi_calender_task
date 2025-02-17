@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:home_widget/home_widget.dart';
 import 'package:saudi_calender_task/models/event_model.dart';
 
-import '../constants.dart';
+import '../core/constants/constants.dart';
 
 
 class HomeWidgetService {

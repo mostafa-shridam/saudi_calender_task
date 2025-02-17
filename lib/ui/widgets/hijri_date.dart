@@ -1,10 +1,13 @@
 import 'package:hijri/hijri_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:saudi_calender_task/core/constants/constants.dart';
 
 /// Get the current Hijri and Miladi dates as a formatted string
 String hijriDateAndMiladiDate({String? date}) {
-  final eventDate = DateTime.tryParse(date?.split(" ")[0] ?? DateTime.now().toString()) ??
-      DateTime.parse(date?.split(" ")[0] ?? DateTime.now().toString());
+  final eventDate = DateFormat(eventsDateFormat)
+          .tryParse(date ?? DateTime.now().toString()) ??
+      DateTime.now();
+
   // Hijri date
   final hDate = HijriCalendar.fromDate(eventDate);
   HijriCalendar.language = 'en';
@@ -28,9 +31,7 @@ String hijriDateAndMiladiDate({String? date}) {
 
 /// Get the event date in both Hijri and Miladi formats with day name
 String parseEventDate({String? date}) {
-  final eventDate = DateTime.tryParse(date?.split(" ")[0] ?? DateTime.now().toString()) ??
-      DateTime.parse(date?.split(" ")[0] ?? DateTime.now().toString());
-
+  final eventDate = DateFormat(eventsDateFormat).tryParse(date ?? DateTime.now().toString()) ?? DateTime.now();
   // Hijri date
   final hDate = HijriCalendar.fromDate(eventDate);
   HijriCalendar.language = 'en';

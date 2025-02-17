@@ -23,33 +23,46 @@ class MyEventsLocalService {
     LocalStorage.instance.put(ConstantsEnums.myCategoryKey.name, category);
   }
 
-  MyEventCategory? getCategories() {
+  dynamic getCategories() {
     final String? category =
         LocalStorage.instance.get(ConstantsEnums.myCategoryKey.name);
     if (category == null) {
       return null;
     }
-    return MyEventCategory.fromJson(jsonDecode(category));
+
+    final decodedData = jsonDecode(category);
+
+    if (decodedData is Map<String, dynamic>) {
+      return MyEventCategory.fromJson(decodedData);
+    } else if (decodedData is List) {
+      return decodedData.map((e) => e as Map<String, dynamic>).toList();
+    } else {
+      log("Error: Unexpected data type: ${decodedData.runtimeType}");
+      return null;
+    }
   }
 
-dynamic getMyEvents() {
-  final myEvents = LocalStorage.instance.get(ConstantsEnums.myEventsKey.name);
+  dynamic getMyEvents() {
+    final myEvents = LocalStorage.instance.get(ConstantsEnums.myEventsKey.name);
 
-  if (myEvents == null) {
-    return null;
+    if (myEvents == null) {
+      return null;
+    }
+
+    final decodedData = jsonDecode(myEvents);
+
+    if (decodedData is Map<String, dynamic>) {
+      return MyEvents.fromJson(decodedData);
+    } else if (decodedData is List) {
+      return decodedData
+          .map((e) => MyEvent.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      log("Error: Unexpected data type: ${decodedData.runtimeType}");
+      return null;
+    }
   }
 
-  final decodedData = jsonDecode(myEvents);
-
-  if (decodedData is Map<String, dynamic>) {
-    return MyEvents.fromJson(decodedData);
-  } else if (decodedData is List) {
-    return decodedData.map((e) => MyEvent.fromJson(e as Map<String, dynamic>)).toList();
-  } else {
-    log("Error: Unexpected data type: ${decodedData.runtimeType}");
-    return null;
-  }
-}
   MyEvent? getMyEvent(int? id) {
     final String? myEvent =
         LocalStorage.instance.get('${ConstantsEnums.myEventKey.name}_$id');

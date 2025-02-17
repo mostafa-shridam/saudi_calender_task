@@ -8,9 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:saudi_calender_task/models/my_event.dart';
 
-import '../../../constants.dart';
+import '../../../core/constants/constants.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../providers/my_event_service.dart';
+import '../../../providers/my_event_provider.dart';
 import '../../widgets/custom_show_snack_bar.dart';
 import '../../widgets/custom_text_filed.dart';
 import 'widgets/event_app_bar.dart';
@@ -67,11 +67,10 @@ class _AddEditEventPageState extends ConsumerState<AddEditEventPage> {
   @override
   Widget build(BuildContext context) {
     const String defaultDate = "Select date";
-    final dateFromModel = DateFormat(selectedDateFormat, "ar").format(
-      DateTime.parse(
-        widget.myEvent?.eventDate?.split(" ")[0] ?? DateTime.now().toString(),
-      ),
-    );
+    final parsedDate = DateFormat(eventsDateFormat).tryParse(
+        widget.myEvent?.eventDate.toString() ?? DateTime.now().toString());
+    final dateFromModel =
+        DateFormat(selectedDateFormat).format(parsedDate ?? DateTime.now());
     return Form(
       key: formKey,
       child: LoaderOverlay(

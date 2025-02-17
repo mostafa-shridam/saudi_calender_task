@@ -3,23 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saudi_calender_task/models/my_event.dart';
 
 import '../../core/theme/app_theme.dart';
-import '../../providers/my_event_service.dart';
+import '../../providers/my_event_provider.dart';
 import 'custom_divider.dart';
 import '../pages/add_event/widgets/build_modal_bottom_sheet.dart';
 import '../pages/add_event/widgets/category_list.dart';
 import '../pages/add_event/widgets/list_tile_category.dart';
 import '../pages/add_event/widgets/select_event_date.dart';
-
-// مزود حالة التصنيفات
-final myCategoryProvider = StateProvider<List<MyEventCategory>>((ref) => [
-      MyEventCategory(
-        id: "0",
-        name: 'عام',
-        color: primaryColor.toARGB32(),
-      )
-    ]);
-
-final colorProvider = StateProvider<int>((ref) => primaryColor.toARGB32());
 
 class CustomListTileCategoryItems extends ConsumerStatefulWidget {
   const CustomListTileCategoryItems({
@@ -28,9 +17,10 @@ class CustomListTileCategoryItems extends ConsumerStatefulWidget {
     required this.repeat,
     required this.category,
     required this.categories,
+    this.tap = true,
   });
   final MyEventCategory? categories;
-
+  final bool tap;
   final ValueChanged<String> alert, repeat;
   final ValueChanged<MyEventCategory> category;
 
@@ -49,6 +39,11 @@ class _CustomListTileCategoryItemsState
   @override
   void initState() {
     super.initState();
+    if (widget.categories != null) {
+      categoryValue = widget.categories!.name ?? 'عام';
+      id = widget.categories!.id ?? "0";
+      color = widget.categories!.color ?? primaryColor.toARGB32();
+    }
     repeatValue = 'أبدًا';
     categoryValue = 'عام';
     id = "0";
@@ -60,6 +55,7 @@ class _CustomListTileCategoryItemsState
     return Column(
       children: [
         ListTileCategory(
+          isTaped: widget.tap,
           onTap: () async {
             final time = await selectTime(
               context: context,
@@ -79,6 +75,7 @@ class _CustomListTileCategoryItemsState
         ),
         const CustomDivider(thickness: 1),
         ListTileCategory(
+          isTaped: widget.tap,
           onTap: () {
             customModalBottomSheet(
               context: context,
@@ -97,6 +94,7 @@ class _CustomListTileCategoryItemsState
         ),
         const CustomDivider(thickness: 1),
         ListTileCategory(
+          isTaped: widget.tap,
           onTap: () {
             buildModalBottomSheet(
               context: context,
@@ -109,17 +107,12 @@ class _CustomListTileCategoryItemsState
                   });
                 }
                 widget.category(value);
-                await ref
-                    .read(myEventServiceProvider.notifier)
-                    .saveCategories(value);
               },
             );
           },
-          color: widget.categories != null ? widget.categories!.color : color,
+          color: color,
           isSelectedCategory: true,
-          categoryName: widget.categories != null
-              ? widget.categories!.name!
-              : categoryValue,
+          categoryName: categoryValue,
           title: 'التصنيف',
         ),
       ],

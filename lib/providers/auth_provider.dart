@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saudi_calender_task/core/repos/auth_repo_impl.dart';
-part 'generated/auth_service.g.dart';
+part 'generated/auth_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class AuthService extends _$AuthService {
@@ -14,6 +14,7 @@ class AuthService extends _$AuthService {
     authRepoIml = ref.watch(authRepoProvider);
     return AuthServiceState(
       isSignedIn: false,
+      isLoading: false,
     );
   }
 
@@ -83,7 +84,7 @@ class AuthService extends _$AuthService {
     } catch (e) {
       log('Error signing in: $e');
       state = state.copyWith(isLoading: false, isSignedIn: false);
-      throw Exception("erorr");
+      return false;
     }
   }
 

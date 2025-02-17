@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:saudi_calender_task/core/mixins/share_app.dart';
 import 'package:saudi_calender_task/core/theme/app_theme.dart';
 import 'package:saudi_calender_task/gen/assets.gen.dart';
 import 'package:saudi_calender_task/models/my_event.dart';
 import 'package:saudi_calender_task/ui/widgets/count_down_timer.dart';
-import 'package:saudi_calender_task/ui/widgets/share_object.dart';
-
-import '../../../providers/my_event_service.dart';
 import '../../widgets/custom_list_tile_category_items.dart';
 import '../../widgets/hijri_date.dart';
-import '../add_event/add_event_page.dart';
 import '../home/widgets/category_list.dart';
+import 'widgets/bottom_row_for_my_event_details.dart';
 
 class MyEventDetails extends ConsumerWidget {
   const MyEventDetails({super.key, required this.myEvent});
@@ -47,9 +42,11 @@ class MyEventDetails extends ConsumerWidget {
                     ),
                     Spacer(),
                     CategoryItem(
-                      isSelected: false,
+                      isSelected: true,
                       icon: "",
                       label: myEvent.category?.name ?? "عام",
+                      color: myEvent.category?.color?.toInt() ??
+                          Colors.white.toARGB32(),
                     ),
                   ],
                 ),
@@ -98,6 +95,7 @@ class MyEventDetails extends ConsumerWidget {
             height: 16,
           ),
           CustomListTileCategoryItems(
+            tap: false,
             categories: myEvent.category,
             alert: (value) {},
             category: (v) {},
@@ -116,50 +114,3 @@ class MyEventDetails extends ConsumerWidget {
   }
 }
 
-class BottomRowForMyEventDetails extends ConsumerWidget with ShareMixin {
-  const BottomRowForMyEventDetails({super.key, required this.myEvent});
-  final MyEvent myEvent;
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ShareObject(
-          onTapDown: (details) {},
-          icon: Assets.images.whatsapp,
-          label: "واتساب",
-          width: 90,
-        ),
-        ShareObject(
-          onTapDown: (details) {},
-          icon: Assets.images.export,
-          label: "مشاركة",
-          width: 90,
-        ),
-        ShareObject(
-          onTapDown: (details) {
-            context.pushNamed(AddEditEventPage.routeName, extra: myEvent);
-          },
-          icon: Assets.images.edit,
-          label: "تعديل",
-          width: 90,
-        ),
-        ShareObject(
-          onTap: () async {
-            final result = await ref
-                .read(myEventServiceProvider.notifier)
-                .deleteEvent(myEvent);
-            if (result) {
-              // ignore: use_build_context_synchronously
-              context.pop();
-            }
-          },
-          icon: Assets.images.trash,
-          label: "حذف",
-          width: 90,
-          color: Colors.red,
-        ),
-      ],
-    );
-  }
-}

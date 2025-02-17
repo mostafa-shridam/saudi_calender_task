@@ -1,28 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../event_service.dart';
+part of '../my_event_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$eventRemoteServiceStateHash() =>
-    r'070aa40457a7f93c7d0a3ada9ddc03a31b7a3bed';
+String _$myEventServiceHash() => r'f148e1c3a0cfe584c7e56528a722c779d66f421e';
 
-/// See also [eventRemoteServiceState].
-@ProviderFor(eventRemoteServiceState)
-final eventRemoteServiceStateProvider = Provider<EventRemoteService>.internal(
-  eventRemoteServiceState,
-  name: r'eventRemoteServiceStateProvider',
+/// See also [MyEventService].
+@ProviderFor(MyEventService)
+final myEventServiceProvider =
+    NotifierProvider<MyEventService, MyEventState>.internal(
+  MyEventService.new,
+  name: r'myEventServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$eventRemoteServiceStateHash,
+      : _$myEventServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef EventRemoteServiceStateRef = ProviderRef<EventRemoteService>;
+typedef _$MyEventService = Notifier<MyEventState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

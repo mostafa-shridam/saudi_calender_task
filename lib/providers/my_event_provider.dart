@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 import '../core/local_service/my_events_local_service.dart';
 import '../models/my_event.dart';
 
-part 'generated/my_event_service.g.dart';
+part 'generated/my_event_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 class MyEventService extends _$MyEventService {
@@ -20,7 +20,9 @@ class MyEventService extends _$MyEventService {
   MyEventState build() {
     _myEventsLocalService = ref.read(myEventsLocalServiceProvider);
     _firebaseFirestore = ref.read(fireStoreServiceProvider);
-    return MyEventState();
+    return MyEventState(
+      loading: false,
+    );
   }
 
   Future<bool> addEvent(MyEvent event) async {
@@ -32,7 +34,7 @@ class MyEventService extends _$MyEventService {
 
     if (internetAvailable) {
       MyEvent? result = await _firebaseFirestore.addEvents(
-        path: BackendEndpoint.addEvent,
+        path: BackendEndpoint.events,
         data: event.toJson(),
         documentId: event.id ?? "",
       );
@@ -82,7 +84,7 @@ class MyEventService extends _$MyEventService {
     state = state.copyWith(loading: true);
     try {
       final result = await _firebaseFirestore.editEvent(
-        path: BackendEndpoint.getEvent,
+        path: BackendEndpoint.events,
         data: event.toJson(),
         documentId: event.id ?? "",
       );
@@ -116,7 +118,7 @@ class MyEventService extends _$MyEventService {
     try {
       final result = internetAvailable
           ? await _firebaseFirestore.deleteEvent(
-              path: BackendEndpoint.getEvent,
+              path: BackendEndpoint.events,
               documentId: event.id!,
               data: event.toJson(),
             )
@@ -148,7 +150,7 @@ class MyEventService extends _$MyEventService {
     final internetAvailable = await InternetConnection().hasInternetAccess;
     if (internetAvailable) {
       final events = await _firebaseFirestore.getEvents(
-        path: BackendEndpoint.getEvent,
+        path: BackendEndpoint.events,
       );
 
       if (events != null) {
@@ -216,9 +218,8 @@ class MyEventService extends _$MyEventService {
 
     for (final event in unsyncedEvents) {
       state = state.copyWith(loading: true);
-      log("Syncing event: ${event?.title}");
       final result = await _firebaseFirestore.addEvents(
-        path: BackendEndpoint.addEvent,
+        path: BackendEndpoint.events,
         data: event!.toJson(),
         documentId: event.id ?? "",
       );
@@ -231,9 +232,12 @@ class MyEventService extends _$MyEventService {
 
   Future<bool> getCategories() async {
     state = state.copyWith(loading: true);
-
+    final internetAvailable = await InternetConnection().hasInternetAccess;
+    if (!internetAvailable) {
+      _myEventsLocalService.getCategories();
+    }
     final events = await _firebaseFirestore.getEvents(
-      path: BackendEndpoint.getEvent,
+      path: BackendEndpoint.events,
     );
     if (events != null) {
       final uniqueCategories = <String, MyEventCategory>{};
@@ -275,17 +279,28 @@ class MyEventService extends _$MyEventService {
   }
 
   void changeCategory(MyEventCategory category) {
-    state = state.copyWith(
-        category: category,
-        loading: false,
-        categories: [...?state.categories, category]);
+    state.copyWith(loading: true);
+    try {
+      state = state.copyWith(
+          category: category,
+          loading: false,
+          categories: [...?state.categories, category]);
+    } catch (e) {
+      state.copyWith(loading: false);
+      log("Error when change category");
+    }
   }
 
   void startInternetListener() {
     InternetConnection().onStatusChange.listen((status) {
-      if (status == InternetStatus.connected) {
-        log("Start sync events $status");
-        syncLocalEvents();
+      state = state.copyWith(loading: true);
+      try {
+        if (status == InternetStatus.connected) {
+          log("Start sync events $status");
+          syncLocalEvents();
+        }
+      } catch (e) {
+        log("Error start internet listener: $e");
       }
     });
   }

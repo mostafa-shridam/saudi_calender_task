@@ -15,13 +15,13 @@ class FireStoreService implements DatabaseService {
   Future<bool> addData({
     required String path,
     String? documentId,
-    required Map<String, dynamic> data,
+    required Map<String, dynamic>? data,
   }) async {
     try {
       if (documentId != null) {
-        await firestore.collection(path).doc(documentId).set(data);
+        await firestore.collection(path).doc(documentId).set(data ?? {});
       } else {
-        await firestore.collection(path).add(data);
+        await firestore.collection(path).add(data ?? {});
       }
       return true;
     } catch (e) {
@@ -69,7 +69,7 @@ class FireStoreService implements DatabaseService {
     }
     try {
       await firestore
-          .collection(BackendEndpoint.getUserData)
+          .collection(BackendEndpoint.users)
           .doc(user.uid)
           .collection(path)
           .doc(documentId)
@@ -89,7 +89,7 @@ class FireStoreService implements DatabaseService {
 
     try {
       var data = await firestore
-          .collection(BackendEndpoint.getUserData)
+          .collection(BackendEndpoint.users)
           .doc(user!.uid)
           .collection(path)
           .get();
@@ -117,7 +117,7 @@ class FireStoreService implements DatabaseService {
     }
     try {
       await firestore
-          .collection(BackendEndpoint.getUserData)
+          .collection(BackendEndpoint.users)
           .doc(user.uid)
           .collection(path)
           .doc(documentId)
@@ -143,7 +143,7 @@ class FireStoreService implements DatabaseService {
     }
     try {
       await firestore
-          .collection(BackendEndpoint.getUserData)
+          .collection(BackendEndpoint.users)
           .doc(user.uid)
           .collection(path)
           .doc(documentId)

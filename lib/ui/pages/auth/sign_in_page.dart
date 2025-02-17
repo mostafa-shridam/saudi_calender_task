@@ -14,7 +14,7 @@ import 'package:saudi_calender_task/ui/widgets/custom_text_filed.dart';
 import 'package:saudi_calender_task/ui/widgets/primary_button.dart';
 import 'package:saudi_calender_task/ui/widgets/social_button.dart';
 
-import '../../../providers/auth_service.dart';
+import '../../../providers/auth_provider.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});

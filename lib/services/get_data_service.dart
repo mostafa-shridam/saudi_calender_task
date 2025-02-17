@@ -4,7 +4,7 @@ import 'package:saudi_calender_task/core/local_service/local_categories_service.
 import 'package:saudi_calender_task/models/category_model.dart';
 import 'package:saudi_calender_task/models/event_model.dart';
 
-import '../constants.dart';
+import '../core/constants/constants.dart';
 import '../core/local_service/events_local_service.dart';
 import 'dio_service.dart';
 import 'get_it_service.dart';

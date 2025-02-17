@@ -2,22 +2,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel {
   UserModel({
-    required this.name,
-    required this.email,
-    required this.uId,
-    required this.image,
+    this.name,
+    this.email,
+    this.uId,
+    this.image,
   });
   String? name;
   String? email;
   String? uId;
   String? image;
 
-  factory UserModel.fromFirebaseUser(User user) {
+  factory UserModel.fromFirebaseUser(User? user) {
     return UserModel(
-      name: user.displayName ?? '',
-      email: user.email ?? '',
-      uId: user.uid,
-      image: user.photoURL ??
+      name: user?.displayName ?? '',
+      email: user?.email ?? '',
+      uId: user?.uid ?? "",
+      image: user?.photoURL ??
           "https://w7.pngwing.com/pngs/27/394/png-transparent-computer-icons-user-user-heroes-black-avatar-thumbnail.png",
     );
   }

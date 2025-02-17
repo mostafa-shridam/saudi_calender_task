@@ -8,7 +8,7 @@ import '../core/repos/repo_impl.dart';
 import '../models/event_model.dart';
 import '../services/get_it_service.dart';
 
-part 'generated/event_service.g.dart';
+part 'generated/event_provider.g.dart';
 
 class EventRemoteService extends StateNotifier<EventState> {
   final RepoImpl repo;
