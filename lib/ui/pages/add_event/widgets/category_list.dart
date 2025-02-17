@@ -16,8 +16,8 @@ class CategoryList {
     primaryColor,
     Colors.green,
     Colors.red,
-    Colors.blue,
-    Colors.pink,
+    Colors.cyanAccent,
+    Colors.purpleAccent,
     Colors.yellow,
   ];
 }

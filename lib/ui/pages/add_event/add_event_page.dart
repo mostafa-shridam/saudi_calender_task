@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:saudi_calender_task/core/extension/color.dart';
 import 'package:saudi_calender_task/models/my_event.dart';
 
 import '../../../constants.dart';
@@ -54,7 +53,7 @@ class _AddEditEventPageState extends ConsumerState<AddEditEventPage> {
       category = widget.myEvent!.category;
       interval = widget.myEvent!.interval;
       id = widget.myEvent!.id;
-      color = widget.myEvent!.color;
+      color = widget.myEvent!.category?.color;
     }
   }
 
@@ -102,8 +101,12 @@ class _AddEditEventPageState extends ConsumerState<AddEditEventPage> {
                   eventDay: eventDay ?? defaultDate,
                   eventDateAr: eventDateAr ?? defaultDate,
                   interval: interval ?? 0,
-                  category: category ?? MyEventCategory(id: "0", name: "عام"),
-                  color: color ?? primaryColor.toARGB32,
+                  category: category ??
+                      MyEventCategory(
+                        id: "0",
+                        name: "عام",
+                        color: color ?? primaryColor.toARGB32(),
+                      ),
                 );
 
                 bool? result;
@@ -112,9 +115,9 @@ class _AddEditEventPageState extends ConsumerState<AddEditEventPage> {
                   myEvent = await ref
                       .watch(myEventServiceProvider.notifier)
                       .editEvent(event);
-                      widget.myEvent?.title = event.title;
-                      widget.myEvent?.startsAt = event.startsAt;
-                      widget.myEvent?.eventDate = event.eventDate;
+                  widget.myEvent?.title = event.title;
+                  widget.myEvent?.startsAt = event.startsAt;
+                  widget.myEvent?.eventDate = event.eventDate;
                 } else {
                   result = await ref
                       .read(myEventServiceProvider.notifier)
@@ -182,6 +185,7 @@ class _AddEditEventPageState extends ConsumerState<AddEditEventPage> {
                         Container(
                           color: Colors.white,
                           child: CustomListTileCategoryItems(
+                            categories: widget.myEvent?.category,
                             alert: (value) =>
                                 setState(() => remainingDays = value),
                             repeat: (value) =>

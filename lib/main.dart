@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_timezone_updated_gradle/flutter_native_timezone.dart';
+import 'package:flutter_native_timezone_latest/flutter_native_timezone_latest.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:saudi_calender_task/core/local_service/local_storage.dart';
@@ -108,7 +108,7 @@ class SaudiCalenderApp extends ConsumerWidget {
 }
 
 Future<void> configureLocalTimeZone() async {
-  final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+  final String currentTimeZone = await FlutterNativeTimezoneLatest.getLocalTimezone();
 
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation(currentTimeZone));

@@ -98,10 +98,9 @@ class MyEventDetails extends ConsumerWidget {
             height: 16,
           ),
           CustomListTileCategoryItems(
+            categories: myEvent.category,
             alert: (value) {},
-            category: (v) {
-              ref.read(myCategoryProvider.notifier).state;
-            },
+            category: (v) {},
             repeat: (value) {},
           ),
           Spacer(),

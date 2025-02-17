@@ -56,7 +56,7 @@ class FireStoreService implements DatabaseService {
   }
 
   @override
-  Future<MyEvent?> addEvent({
+  Future<MyEvent?> addEvents({
     required String path,
     required Map<String, dynamic> data,
     required String documentId,
@@ -82,7 +82,7 @@ class FireStoreService implements DatabaseService {
   }
 
   @override
-  Future<MyEvents?> getEvent({
+  Future<MyEvents?> getEvents({
     required String path,
   }) async {
     User? user = FirebaseAuth.instance.currentUser;

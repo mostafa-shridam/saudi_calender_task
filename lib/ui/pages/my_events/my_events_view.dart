@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:saudi_calender_task/core/extension/color.dart';
 import 'package:saudi_calender_task/services/firebase_auth_service.dart';
 import 'package:saudi_calender_task/ui/pages/add_event/add_event_page.dart';
 import 'package:saudi_calender_task/ui/pages/auth/sign_in_page.dart';
@@ -27,6 +24,7 @@ class MyEventsView extends ConsumerStatefulWidget {
 class _MyEventsViewState extends ConsumerState<MyEventsView> {
   Future<void> init() async {
     await ref.read(myEventServiceProvider.notifier).getMyEvents();
+    ref.read(myEventServiceProvider.notifier).startInternetListener();
   }
 
   @override
@@ -40,14 +38,13 @@ class _MyEventsViewState extends ConsumerState<MyEventsView> {
 
   @override
   Widget build(BuildContext context) {
-    final myEvents = ref.watch(myEventServiceProvider).events ?? [];
-    final isLoading = ref.watch(myEventServiceProvider).loading;
+    final myEvents = ref.watch(myEventServiceProvider).filterEvents ?? [];
+    final isLoading = ref.watch(myEventServiceProvider).loading ?? false;
 
     return Builder(builder: (context) {
       if (isLoading && FirebaseAuthService().isSignedIn() && myEvents.isEmpty) {
         return const Center(child: CircularProgressIndicator.adaptive());
       }
-      log("myEvents: ${myEvents.length}");
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +52,7 @@ class _MyEventsViewState extends ConsumerState<MyEventsView> {
         children: [
           SendGift(),
           TodayDate(
-            color: Color(graySwatch.shade100.toARGB32),
+            color: Color(graySwatch.shade100.toARGB32()),
           ),
           MyEventCategoryList(),
           CustomDivider(thickness: 1),
@@ -66,6 +63,7 @@ class _MyEventsViewState extends ConsumerState<MyEventsView> {
           if (myEvents.isNotEmpty) ...[
             Flexible(
               child: ListView.separated(
+                padding: EdgeInsets.only(bottom: 60),
                 separatorBuilder: (context, index) =>
                     CustomDivider(thickness: 1),
                 itemCount: myEvents.length,
@@ -74,7 +72,7 @@ class _MyEventsViewState extends ConsumerState<MyEventsView> {
                 },
               ),
             ),
-          ]
+          ],
         ],
       );
     });

@@ -121,27 +121,29 @@ class LocalNotificationsService {
     }
   }
 
-  Future<void> showScheduleNotification({
-    required String id,
+  Future<bool> showScheduleNotification({
+    required int id,
     required String title,
     required String body,
     required DateTime dateTime,
   }) async {
     try {
       await flutterLocalNotificationsPlugin.zonedSchedule(
-        int.parse(id),
+        id,
         title,
         body,
         tz.TZDateTime.from(dateTime, tz.local),
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.dateAndTime,
-        payload: id,
+        payload: id.toString(),
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
       );
+      return true;
     } catch (e, stackTrace) {
       log('Failed to schedule notification', error: e, stackTrace: stackTrace);
+      return false;
     }
   }
 

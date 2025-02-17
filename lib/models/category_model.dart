@@ -1,4 +1,3 @@
-import 'package:saudi_calender_task/core/extension/color.dart';
 
 import '../core/theme/app_theme.dart';
 
@@ -47,7 +46,7 @@ class CategoryModel {
   String? bgColor;
   String? borderColor;
 
-  int get backgroundColor => int.tryParse(color?.replaceAll("#", "0XFF") ?? graySwatch.shade600.toARGB32.toString()) ?? 0;
+  int get backgroundColor => int.tryParse(color?.replaceAll("#", "0XFF") ?? graySwatch.shade600.toARGB32().toString()) ?? 0;
 
   CategoryModel(
       {this.image,

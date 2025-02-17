@@ -1,11 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:saudi_calender_task/ui/pages/add_event/widgets/category_list.dart';
+
+import 'package:saudi_calender_task/providers/my_event_service.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../gen/assets.gen.dart';
-import '../../../widgets/custom_list_tile_category_items.dart';
+import '../../../../models/my_event.dart';
 
 class MyEventCategoryList extends ConsumerWidget {
   const MyEventCategoryList({
@@ -52,25 +54,62 @@ class MyEventCategoryListItems extends ConsumerStatefulWidget {
       _MyEventCategoryListItemsState();
 }
 
-class _MyEventCategoryListItemsState extends ConsumerState<MyEventCategoryListItems> {
+class _MyEventCategoryListItemsState
+    extends ConsumerState<MyEventCategoryListItems> {
+  Future<void> init() async {
+    await ref.read(myEventServiceProvider.notifier).getCategories();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => init());
+  }
+
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    final category = ref.watch(myCategoryProvider.select((value) => value));
+    final category = ref.watch(myEventServiceProvider).categories ??
+        [
+          MyEventCategory.fromJson(
+              {"id": "0", "name": "عام", "color": graySwatch.shade400.toARGB32()}),
+        ];
+    // remove duplicates
+
+    List<MyEventCategory> removeDuplicates({
+      required List<MyEventCategory?> categories,
+    }) {
+      if (categories.isEmpty) {
+        return [];
+      }
+      final List<MyEventCategory> uniqueCategories = [];
+      for (final category in categories) {
+        if (!uniqueCategories.contains(category)) {
+          uniqueCategories.add(category!);
+        }
+      }
+      return uniqueCategories;
+    }
+
+  List<MyEventCategory> uniqeCategory = removeDuplicates(categories: category);
     return Expanded(
       child: SizedBox(
         height: 37,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: category.length,
+          itemCount: uniqeCategory.length,
           itemBuilder: (context, index) {
-            
             return GestureDetector(
-              onTap: () => setState(() => currentIndex = index),
+              onTap: () => setState(() {
+                ref.read(myEventServiceProvider.notifier).changeCategory(
+                      uniqeCategory[index],
+                    );
+                currentIndex = index;
+              }),
               child: MyEventSelectItem(
                 index: index,
-                color: CategoryList.colorList[index],
-                title: category[index].name ?? "",
+                color: Color(uniqeCategory[index].color ?? graySwatch.toARGB32()),
+                title: uniqeCategory[index].name ?? "",
                 currentIndex: currentIndex,
               ),
             );

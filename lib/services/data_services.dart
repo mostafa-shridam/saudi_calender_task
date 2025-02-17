@@ -19,12 +19,12 @@ abstract class DatabaseService {
     required String path,
     required String documentId,
   });
-  Future<MyEvent?> addEvent({
+  Future<MyEvent?> addEvents({
     required String path,
     required Map<String, dynamic> data,
     required String documentId,
   });
-  Future<MyEvents?> getEvent({
+  Future<MyEvents?> getEvents({
     required String path,
   });
   Future<MyEvent?> editEvent({
@@ -32,7 +32,7 @@ abstract class DatabaseService {
     required Map<String, dynamic> data,
     required String documentId,
   });
-    Future<bool> deleteEvent({
+  Future<bool> deleteEvent({
     required String path,
     required Map<String, dynamic> data,
     required String documentId,

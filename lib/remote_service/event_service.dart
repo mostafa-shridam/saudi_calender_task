@@ -78,8 +78,6 @@ class EventRemoteService extends StateNotifier<EventState> {
 
   // change category
   void changeCategory(CategoryModel category) {
-    log('Changing category to: ${category.name}');
-
     state = state.copyWith(category: category);
   }
 }
@@ -90,7 +88,7 @@ class EventState {
   bool? isLoading;
   CategoryModel? category;
 // get flitered list from events model
-  List<EventModel> get fliteredList {
+  List<EventModel> get filterdEvents {
     if (category?.id == '0') return events?.data ?? [];
     return events?.data?.where((element) {
           return element.section?.category?.id == category?.id;

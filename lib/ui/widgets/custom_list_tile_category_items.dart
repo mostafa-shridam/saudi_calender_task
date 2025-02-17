@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:saudi_calender_task/core/enums/constants_enums.dart';
-import 'package:saudi_calender_task/core/extension/color.dart';
-import 'package:saudi_calender_task/core/local_service/local_storage.dart';
 import 'package:saudi_calender_task/models/my_event.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../providers/my_event_service.dart';
 import 'custom_divider.dart';
 import '../pages/add_event/widgets/build_modal_bottom_sheet.dart';
 import '../pages/add_event/widgets/category_list.dart';
@@ -17,10 +15,11 @@ final myCategoryProvider = StateProvider<List<MyEventCategory>>((ref) => [
       MyEventCategory(
         id: "0",
         name: 'عام',
+        color: primaryColor.toARGB32(),
       )
     ]);
 
-final colorProvider = StateProvider<int>((ref) => primaryColor.toARGB32);
+final colorProvider = StateProvider<int>((ref) => primaryColor.toARGB32());
 
 class CustomListTileCategoryItems extends ConsumerStatefulWidget {
   const CustomListTileCategoryItems({
@@ -28,7 +27,9 @@ class CustomListTileCategoryItems extends ConsumerStatefulWidget {
     required this.alert,
     required this.repeat,
     required this.category,
+    required this.categories,
   });
+  final MyEventCategory? categories;
 
   final ValueChanged<String> alert, repeat;
   final ValueChanged<MyEventCategory> category;
@@ -42,19 +43,20 @@ class _CustomListTileCategoryItemsState
     extends ConsumerState<CustomListTileCategoryItems> {
   TimeOfDay? timeValue;
   late String repeatValue;
-  late String categoryValue;
+  late String categoryValue, id;
+  late int color;
 
   @override
   void initState() {
     super.initState();
     repeatValue = 'أبدًا';
     categoryValue = 'عام';
+    id = "0";
+    color = primaryColor.toARGB32();
   }
 
   @override
   Widget build(BuildContext context) {
-    int colorSelect = ref.watch(colorProvider);
-
     return Column(
       children: [
         ListTileCategory(
@@ -76,8 +78,6 @@ class _CustomListTileCategoryItemsState
           title: 'التنبيه',
         ),
         const CustomDivider(thickness: 1),
-
-        // اختيار التكرار
         ListTileCategory(
           onTap: () {
             customModalBottomSheet(
@@ -96,39 +96,30 @@ class _CustomListTileCategoryItemsState
           title: 'التكرار',
         ),
         const CustomDivider(thickness: 1),
-
-        // اختيار التصنيف
         ListTileCategory(
           onTap: () {
             buildModalBottomSheet(
               context: context,
-              selectedCategory: (value) {
+              selectedCategory: (value) async {
                 if (mounted) {
-                  setState(() => categoryValue = value);
+                  setState(() {
+                    categoryValue = value.name!;
+                    color = value.color!;
+                    id = value.id!;
+                  });
                 }
-                widget
-                    .category(MyEventCategory(id: "$colorSelect", name: value));
-
-                LocalStorage.instance.put(
-                  ConstantsEnums.myCategoryKey.name,
-                  {
-                    'id': colorSelect,
-                    'name': value,
-                  },
-                );
-              },
-              selectedColor: (value) {
-                final selectedIndex = CategoryList.colorList.indexOf(value);
-                if (mounted) {
-                  ref.read(colorProvider.notifier).state = value.toARGB32;
-                  setState(() => colorSelect = selectedIndex);
-                }
+                widget.category(value);
+                await ref
+                    .read(myEventServiceProvider.notifier)
+                    .saveCategories(value);
               },
             );
           },
-          color: colorSelect,
+          color: widget.categories != null ? widget.categories!.color : color,
           isSelectedCategory: true,
-          categoryName: categoryValue,
+          categoryName: widget.categories != null
+              ? widget.categories!.name!
+              : categoryValue,
           title: 'التصنيف',
         ),
       ],

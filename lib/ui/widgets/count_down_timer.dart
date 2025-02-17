@@ -11,7 +11,7 @@ class CountDownTimer extends StatelessWidget {
   final bool makeAsRow;
   @override
   Widget build(BuildContext context) {
-    final formate = DateFormat('yyyy-MM-dd HH:mm').parse(date);
+    final formate = DateFormat("yyyy-MM-dd HH:mm").tryParse(date) ?? DateTime.now();
     final endTime = formate.millisecondsSinceEpoch;
     return CountdownTimer(
       onEnd: () {},

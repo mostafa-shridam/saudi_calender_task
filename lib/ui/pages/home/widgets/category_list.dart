@@ -56,7 +56,6 @@ class _CategoryListItemsState extends ConsumerState<CategoryListItems> {
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesProvider);
-
     List<CategoryModel> removeDuplicates({
       required List<CategoryModel?> categories,
     }) {

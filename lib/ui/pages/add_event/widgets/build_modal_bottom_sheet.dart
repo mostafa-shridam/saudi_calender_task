@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saudi_calender_task/models/my_event.dart';
 
 import 'category_list.dart';
 
 void buildModalBottomSheet({
   required BuildContext context,
-  required ValueChanged<String> selectedCategory,
-  required ValueChanged<Color> selectedColor,
+  required ValueChanged<MyEventCategory> selectedCategory,
 }) {
   showModalBottomSheet(
     context: context,
@@ -23,9 +24,15 @@ void buildModalBottomSheet({
               backgroundColor: CategoryList.colorList[index],
             ),
             onTap: () {
-              selectedCategory(CategoryList.categoryList[index]);
-              selectedColor(CategoryList.colorList[index]);
-              Navigator.pop(context);
+              selectedCategory(
+                MyEventCategory(
+                  id: index.toString(),
+                  name: CategoryList.categoryList[index].toString(),
+                  color: CategoryList.colorList[index].toARGB32(),
+                ),
+              );
+
+              context.pop();
             },
           );
         },

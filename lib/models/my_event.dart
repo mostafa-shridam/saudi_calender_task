@@ -11,9 +11,9 @@ class MyEvent {
   String? eventDate;
   String? eventDay;
   String? eventDateAr;
+  bool? isSynced;
   int? interval;
   MyEventCategory? category;
-  int? color;
 
   MyEvent({
     this.id,
@@ -25,8 +25,8 @@ class MyEvent {
     this.eventDay,
     this.eventDateAr,
     this.interval,
+    this.isSynced,
     this.category,
-    this.color,
   });
 
   factory MyEvent.fromJson(Map<String, dynamic> json) {
@@ -40,10 +40,10 @@ class MyEvent {
       eventDay: json['event_day'],
       eventDateAr: json['event_date_ar'],
       interval: json['interval'],
+      isSynced: json['is_synced'] ?? false,
       category: json['category'] != null
           ? MyEventCategory.fromJson(json['category'])
           : null,
-      color: json['color'],
     );
   }
 
@@ -58,8 +58,8 @@ class MyEvent {
       'event_day': eventDay,
       'event_date_ar': eventDateAr,
       'interval': interval,
+      'is_synced': isSynced,
       'category': category?.toJson(),
-      'color': color,
     };
   }
 
@@ -82,16 +82,19 @@ class MyEvent {
 class MyEventCategory {
   String? id;
   String? name;
+  int? color;
 
   MyEventCategory({
     this.id,
     this.name,
+    required this.color,
   });
 
   factory MyEventCategory.fromJson(Map<String, dynamic> json) {
     return MyEventCategory(
-      id: json['id'].toString(),
+      id: json['id']?.toString(),
       name: json['name'],
+      color: json['color'],
     );
   }
 
@@ -99,6 +102,7 @@ class MyEventCategory {
     return {
       'id': id,
       'name': name,
+      'color': color,
     };
   }
 }
