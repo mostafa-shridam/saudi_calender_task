@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saudi_calender_task/models/my_event.dart';
 
 import '../../core/theme/app_theme.dart';
-import '../../providers/my_event_provider.dart';
 import 'custom_divider.dart';
 import '../pages/add_event/widgets/build_modal_bottom_sheet.dart';
 import '../pages/add_event/widgets/category_list.dart';

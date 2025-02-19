@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:saudi_calender_task/core/repos/auth_repo_impl.dart';
 
 import 'package:saudi_calender_task/gen/assets.gen.dart';
-import 'package:saudi_calender_task/providers/my_event_provider.dart';
 import 'package:saudi_calender_task/services/home_widget_service.dart';
 import 'package:saudi_calender_task/ui/pages/add_event/add_event_page.dart';
 import 'package:saudi_calender_task/ui/pages/home/home_page.dart';
@@ -19,7 +18,7 @@ import '../../../providers/event_provider.dart';
 import '../../widgets/home_app_bar.dart';
 import '../auth/sign_in_page.dart';
 
-class MainPage extends ConsumerStatefulWidget with ShareMixin {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
   static const String routeName = '/MainPage';
 
@@ -27,7 +26,7 @@ class MainPage extends ConsumerStatefulWidget with ShareMixin {
   ConsumerState<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends ConsumerState<MainPage> {
+class _MainPageState extends ConsumerState<MainPage> with ShareMixin {
   int currentIndex = 0;
   @override
   void initState() {
@@ -51,7 +50,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     return Scaffold(
       appBar: homeAppBar(
         onTapDown: (details) {
-          widget.shareApp(
+          shareApp(
             context,
             details.globalPosition.dx,
             details.globalPosition.dy,

@@ -88,8 +88,17 @@ class EventState {
   bool? isLoading;
   CategoryModel? category;
 // get flitered list from events model
-  List<EventModel> get filterdEvents {
-    if (category?.id == '0') return events?.data ?? [];
+  List<EventModel> get filteredEvents {
+    //get one event from each category
+    Map<String, EventModel>? uniqueEvents = {};
+    events?.data?.forEach((event) {
+      String? categoryId = event.section?.category?.id;
+      if (categoryId != null && !uniqueEvents.containsKey(categoryId)) {
+        uniqueEvents[categoryId] = event;
+      }
+    });
+
+    if (category?.id == '0') return uniqueEvents.values.toList() ?? [];
     return events?.data?.where((element) {
           return element.section?.category?.id == category?.id;
         }).toList() ??

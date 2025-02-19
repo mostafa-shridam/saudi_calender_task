@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
@@ -10,10 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saudi_calender_task/core/constants/constants.dart';
-import 'package:saudi_calender_task/core/local_service/my_events_local_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 import '../../services/handle_notifications.dart';
-import '../../core/local_service/events_local_service.dart';
 
 part 'generated/local_notification_service.g.dart';
 
@@ -22,12 +19,10 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 class LocalNotificationsService {
   final NotificationDetails notificationDetails;
-  final EventsLocalService eventsLocalService;
   final HandleNotifications handleNotifications;
 
   LocalNotificationsService({
     required this.notificationDetails,
-    required this.eventsLocalService,
     required this.handleNotifications,
   });
 
@@ -209,6 +204,5 @@ LocalNotificationsService localNotificationsService(Ref ref) {
   return LocalNotificationsService(
     notificationDetails: notificationDetails,
     handleNotifications: ref.watch(handleNotificationsProvider),
-    eventsLocalService: ref.watch(eventsLocalServiceProvider),
   );
 }

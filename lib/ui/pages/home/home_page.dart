@@ -19,7 +19,7 @@ class HomePage extends ConsumerWidget with ShareMixin {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final events =
-        ref.watch(eventProvider.select((value) => value.filterdEvents));
+        ref.watch(eventProvider.select((value) => value.filteredEvents));
 
     return Column(
       children: [
